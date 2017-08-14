@@ -47,11 +47,11 @@ public class Grupo {
         this.cicloGrupo = cicloGrupo;
     }
 
-    public ArrayList<Persona> getAlumnos() {
+    public ArrayList<Usuario> getAlumnos() {
         return alumnos;
     }
 
-    public void setAlumnos(ArrayList<Persona> alumnos) {
+    public void setAlumnos(ArrayList<Usuario> alumnos) {
         this.alumnos = alumnos;
     }
     
