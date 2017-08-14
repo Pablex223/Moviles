@@ -15,7 +15,7 @@ public class Grupo {
     private int numGrupo;
     private Curso cursoGrupo;
     private Ciclo cicloGrupo;
-    private ArrayList<Persona> alumnos;
+    private ArrayList<Usuario> alumnos;
     
     public Grupo(int numGrupo, Curso cursoGrupo, Ciclo cicloGrupo) {
         this.numGrupo = numGrupo;
