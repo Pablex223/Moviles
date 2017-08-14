@@ -10,5 +10,16 @@ package backend.entidades;
  * @author Estudiantes
  */
 public class Curso {
+    private String codigo;
+    
+    public Curso() {
+        codigo = "123";
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+  
     
 }
