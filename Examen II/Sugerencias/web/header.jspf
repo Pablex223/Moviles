@@ -1,0 +1,45 @@
+<%-- any content can be specified here e.g.: --%>
+<%@page import="una.examen.entity.Usuario"%>
+<%@ page pageEncoding="UTF-8" %>
+
+<%
+    session = request.getSession(true);
+    if (session == null) {
+        session = request.getSession(true);
+        session.setAttribute("loginStatus", "Not a User");
+        //remove unused attributes
+        /*
+        session.removeAttribute("OutboundReservation");
+        session.removeAttribute("ReturnReservation");
+        */
+    }
+%>
+<intercept-url pattern="/favicon.ico" access="ROLE_ANONYMOUS" />
+<div class="header">
+    <div class="div-2"><h1>SUGERENCIAS</h1></div>
+    <%
+        Usuario usuario = (Usuario) session.getAttribute("usuario");
+        if(usuario == null) {
+    %>
+    <div class="div-off-1 div-1 text-right">
+        <h3> 
+            <a href="index.jsp"><img class="logo" src="img/info.png"></a>
+            <a href="login.jsp"><img class="logo" src="img/on.png"></a>
+        </h3>
+    </div>
+    <%
+        } //end if
+        if (usuario != null) {
+    %>
+    <div class="div-1 text-right"><h3>(User: <%=usuario.getId()%>)</h3></div>
+    <div class="div-off-1 div-1 text-right">
+        <h3>
+            <a href="index.jsp"><img class="logo" src="img/info.png"></a>
+            <a href="sugerencias.jsp"><img class="logo" src="img/idea.png"></a>
+            <a onclick="javascript:new LoginController(this).doLogout();" id="logout"><img class="logo" src="img/off.png"></a>
+        </h3>
+    </div>
+    <%
+        } //end if 
+    %>
+</div>
