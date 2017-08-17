@@ -1,0 +1,8 @@
+CAPAS:
+-----FRONTEND---------
+1)Interfaz
+2)Control
+-----BACKEND----------
+3)Logica de negocio (BL)
+4)Acceso a Datos (DAO/DAL)
+5)Datos (Entidades)
