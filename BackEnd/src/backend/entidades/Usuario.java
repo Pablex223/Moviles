@@ -13,11 +13,13 @@ public class Usuario {
      private String cedula;
      private String clave;
      private TipoUsuario tipoUsuario;
+     private Persona personaAsignada;
 
-    public Usuario(String cedula, String clave, TipoUsuario tipoUsuario) {
+    public Usuario(String cedula, String clave, TipoUsuario tipoUsuario, Persona personaAsignada) {
         this.cedula = cedula;
         this.clave = clave;
         this.tipoUsuario = tipoUsuario;
+        this.personaAsignada = personaAsignada;
     }
 
     public String getCedula() {
@@ -42,6 +44,19 @@ public class Usuario {
 
     public void setTipoUsuario(TipoUsuario tipoUsuario) {
         this.tipoUsuario = tipoUsuario;
+    }
+
+    public Persona getPersonaAsignada() {
+        return personaAsignada;
+    }
+
+    public void setPersonaAsignada(Persona personaAsignada) {
+        this.personaAsignada = personaAsignada;
+    }
+
+    @Override
+    public String toString() {
+        return "Usuario{" + "cedula=" + cedula + ", clave=" + clave + ", tipoUsuario=" + tipoUsuario + ", personaAsignada=" + personaAsignada + '}';
     }
      
      

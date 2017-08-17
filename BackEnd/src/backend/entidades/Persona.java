@@ -5,12 +5,12 @@ import java.util.Date;
 
 
 
-public class Persona {
-    private String  cedula;
-    private String  nombre;
-    private String telefono;
-    private String email;
-    private Date nacimiento;
+abstract public class Persona {
+    protected String  cedula;
+    protected String  nombre;
+    protected String telefono;
+    protected String email;
+    protected Date nacimiento;
     
 
     public Persona(String cedula, String nombre, String telefono, String email, Date nacimiento) {
@@ -24,45 +24,48 @@ public class Persona {
     
    
 
-    public String getCedula() {
+    final  public String getCedula() {
         return cedula;
     }
 
-    public void setCedula(String cedula) {
+    final public void setCedula(String cedula) {
         this.cedula = cedula;
     }
 
-    public String getNombre() {
+    final public String getNombre() {
         return nombre;
     }
 
-    public void setNombre(String nombre) {
+    final public void setNombre(String nombre) {
         this.nombre = nombre;
     }
 
-    public String getTelefono() {
+    final public String getTelefono() {
         return telefono;
     }
 
-    public void setTelefono(String telefono) {
+   final  public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
 
-    public String getEmail() {
+   final  public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
+   final  public void setEmail(String email) {
         this.email = email;
     }
 
-    public Date getNacimiento() {
+    final public Date getNacimiento() {
         return nacimiento;
     }
 
-    public void setNacimiento(Date nacimiento) {
+    final public void setNacimiento(Date nacimiento) {
         this.nacimiento = nacimiento;
     }
+
+    @Override
+    abstract public String toString();
     
     
     

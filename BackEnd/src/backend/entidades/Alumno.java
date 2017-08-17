@@ -14,17 +14,22 @@ import java.util.Date;
 public class Alumno extends Persona{
     private Carrera carrera;
     
-    public Alumno(String cedula, String nombre, String telefono, String email, Date nacimiento, Carrera carrera) {
+    public Alumno(String cedula, String nombre, String telefono, String email, Date nacimiento) {
         super(cedula, nombre, telefono, email, nacimiento);
-        this.carrera = carrera;
+        this.carrera = null;
     }
 
     public Carrera getCarrera() {
         return carrera;
     }
 
-    public void setCarrera(Carrera carrera) {
+    public void asignarCarrera(Carrera carrera) {
         this.carrera = carrera;
+    }
+
+    @Override
+    public String toString() {
+         return "Alumno{" + "cedula=" + cedula + ", nombre=" + nombre + ", telefono=" + telefono + ", email=" + email + ", nacimiento=" + nacimiento + '}';
     }
     
     

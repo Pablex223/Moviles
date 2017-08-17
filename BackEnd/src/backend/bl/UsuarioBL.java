@@ -9,6 +9,6 @@ package backend.bl;
  *
  * @author Estudiantes
  */
-public class AlumnoBL {
+public class UsuarioBL {
     
 }
