@@ -1,7 +1,7 @@
 CAPAS:
 -----FRONTEND---------
-1)Interfaz
-2)Control
+1)Interfaz (JSP)
+2)Control (Servlets)
 -----BACKEND----------
 3)Logica de negocio (BL)
 4)Acceso a Datos (DAO/DAL)
