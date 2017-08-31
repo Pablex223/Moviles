@@ -1,0 +1,7 @@
+->modifcar todos los chunches
+->busq historial
+->interfaces
+
+---sugues
+->table de requerimientos para requisitos de curso
+-

@@ -1,0 +1,73 @@
+
+
+
+INTERFAZ					|		CONTROL				|		ACCESO A DATOS			|
+
+solicita datos alumno		|	crea alumno				|		mete alumno
+solicita datos profesor		|	crea profesor			|		mete profesor
+solicita datos matriculador	|	crea matriculador		|		mete matriculador
+solicita datos adminstrador	|	crea admnistradro		|		mete administrador
+
+elimina						|	valida existencia de ced|		elimina persona					--> no lo pide
+
+solcita &&muestra datos		|	valida ced jala persona	|		actualiza persona
+-----------------------------------------------------------------------------------------
+solicita datos carrera		|	crea carrera			|		mete carrera
+
+solicita && muestar carrera	|	valida jalar carrera	|		actualiza carrera
+-----------------------------------------------------------------------------------------
+solicita datos curso		|	valido carrera
+								crea curso 				|		mete curso
+
+solicita && muestar curso	|	valida jalar curso 		|		mete curso
+
+solicita codigo				|	valida existencia		|		elimina						   --> no lo pide
+-----------------------------------------------------------------------------------------
+solicita datos grupo		|	valida existe carrera	|
+							|		crea grupo			|
+														|		mete grupo
+
+solicita && muestar gurpo	|	valida jalar grupo		|		actualiza grupo
+
+solicita codigo				|	valida existencia grupo	|		elimina grupo					(debe fijarse que no tenga a nadie relacionado)
+-----------------------------------------------------------------------------------------
+oferta							
+								valida profesor
+							
+solcita carrera&&ciclo		|	valida curso-jala cursos|		saca cursos de la carrera en ciclo
+seleccion de curso			|	jala grupos de curso	|		saca grupos de curso
+agrega grupo				|	METODOS DE GRUPO		|		METODOS DE GRUPO
+-----------------------------------------------------------------------------------------
+matricula						validar grupo
+solicita estudiante			|	valida jalar estudiante |		saca persona tipo 4
+muestra cursos				|							|		saca cursos de NOTA 			(o los grupos)
+escoge		matricula	
+pide codigo de grupo		|  busca curso con cod grupo|		saca cod curso de tabla grupo 			
+_							|							|		saca carrera de tabla curso 
+_							|  valida condicion de curso|		saca condicion  de tabla nota
+show cond de matri (S/N) 	| crea nota(curso-grupo-est)|		mete nota
+
+escoge		DESmatricula	
+pide codigo de grupo		| valida grupo de estudiante|		saca condicion de tabla NOTA en estudiante 			
+show cond de desmatri (S/N)	| 			---				|		elimina registro de tabla NOTA
+------------------------------------------------------------------------------------------
+registro de notas
+muestra lista de grupos		| pueded validar existencia |		saca grupos de tabla NOTA con condicion != aplazado(ciclo actual) || aprovado && del profesor
+seleciona grupo				|	valida condicion		|		saca NOTA Y ESTUDIANTES de tabla NOTA con el cod del grupo
+muestra notas-actualiza		| 							|		actualiza datos de tabla nota en estudiante con grupo
+------------------------------------------------------------------------------------------
+historial
+solicita estudiante			|	valida estudiante
+								muestro historial		|		saca * de tabla NOTA cuando condicion = aplzado || aprovado
+
+
+
+
+
+	
+
+
+
+
+
+
