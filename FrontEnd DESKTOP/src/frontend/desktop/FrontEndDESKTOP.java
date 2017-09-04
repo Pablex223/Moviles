@@ -5,17 +5,19 @@
  */
 package frontend.desktop;
 
+import Control.Control;
+import frontend.desktop.vista.VentanaTabla;
+
 /**
  *
  * @author luisf
  */
 public class FrontEndDESKTOP {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
-        // TODO code application logic here
+        Control control  = new Control();
+        VentanaTabla ventana = new VentanaTabla(control);
+        ventana.iniciar();
     }
     
 }
