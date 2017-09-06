@@ -3,6 +3,8 @@
 package frontend.desktop.vista;
 
 import Control.Control;
+import Modelo.Alumno;
+import Modelo.Persona;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.FlowLayout;
@@ -11,6 +13,8 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Observable;
 import java.util.Observer;
 import javax.swing.BorderFactory;
@@ -18,10 +22,13 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
 
 
 public class VentanaTabla extends JFrame implements Observer{
@@ -42,16 +49,19 @@ public class VentanaTabla extends JFrame implements Observer{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
     
     }
-    
+    // <editor-fold defaultstate="collapsed" desc="COMPONENTES">
     private void ajustarComponentes(Container c){
         estado = new BarraEstado();
         lbSubtitulo = new JLabel("Haga doble-clic para editar los valores");
+        lbUsuario = new JLabel("Usuario");
+        panelUsuario = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        panelUsuario.add(lbUsuario);
         
         panelEncabezado = new JPanel();
-        panelEncabezado.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelEncabezado.setLayout(new BorderLayout());
         panelEncabezado.setBorder(BorderFactory.createEmptyBorder(12,12,6,12));
-        panelEncabezado.add(lbSubtitulo);
-        
+        panelEncabezado.add(lbSubtitulo, BorderLayout.LINE_START);
+        panelEncabezado.add(panelUsuario, BorderLayout.LINE_END);
         
         panelTabla = new JPanel();
         panelTabla.setLayout(new BorderLayout());
@@ -65,7 +75,7 @@ public class VentanaTabla extends JFrame implements Observer{
                         JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         
         tablaDatos.setFillsViewportHeight(true);
-       // configurarTabla(tablaDatos);
+       configurarTabla(tablaDatos);
         
         panelTabla.add(scrollPaneTabla, BorderLayout.CENTER);
         
@@ -182,65 +192,76 @@ public class VentanaTabla extends JFrame implements Observer{
         c.add(estado, BorderLayout.PAGE_END);
     
     }
+    // </editor-fold>
     
-    
+     //<editor-fold defaultstate="collapsed" desc="EVENTOS">
     private void agregarEventos(){
-      
+        btnAgregar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Persona nuevoAlumno = new Alumno(8999, "correo", "Pepe", "zzz", "1/1/1", "root", "IDS");
+                control.agregar(nuevoAlumno);
+            }
+        });
     }
-            
+            // </editor-fold> 
     
-//    public void configurarTabla(JTable tabla){
-//        //En este llamado se asocia el modelo de la tabla
-//        // a la tabla (JTable)
-//        tabla.setModel(gestorPrincipal.modeloTabla());
-//        tabla.setAutoCreateRowSorter(false);
-//        
-//        tabla.getModel().addTableModelListener(new TableModelListener() {
-//
-//            @Override
-//            public void tableChanged(TableModelEvent e) {
-//                gestorPrincipal.actualizar(String.format("Se actualizó el regsitro: %d",
-//                        e.getFirstRow() + 1));
-//            }
-//        });
-//        
-//        
-////        tabla.getColumnModel().getColumn(0).setPreferredWidth(48);
-////        tabla.getColumnModel().getColumn(1).setPreferredWidth(120);
-////        tabla.getColumnModel().getColumn(2).setPreferredWidth(120);
-////        tabla.getColumnModel().getColumn(3).setPreferredWidth(36);
-////        tabla.getColumnModel().getColumn(4).setPreferredWidth(24);
-//        
-//        
-//    }
+    public void configurarTabla(JTable tabla){
+        //En este llamado se asocia el modelo de la tabla
+        // a la tabla (JTable)
+        tabla.setModel(control.modeloTabla());
+        tabla.setAutoCreateRowSorter(false);
+        
+        tabla.getModel().addTableModelListener(new TableModelListener() {
+
+            @Override
+            public void tableChanged(TableModelEvent e) {
+                control.actualizar(String.format("Se actualizó el regsitro: %d",
+                        e.getFirstRow() + 1));
+            }
+
+            
+        });
+        
+        
+//        tabla.getColumnModel().getColumn(0).setPreferredWidth(48);
+//        tabla.getColumnModel().getColumn(1).setPreferredWidth(120);
+//        tabla.getColumnModel().getColumn(2).setPreferredWidth(120);
+//        tabla.getColumnModel().getColumn(3).setPreferredWidth(36);
+//        tabla.getColumnModel().getColumn(4).setPreferredWidth(24);
+        
+        
+    }
     
     
     
     
     public void iniciar(){        
-       // control.registrar(this);
-       // control.cargarDatos();
+        control.registrar(this);
         estado.mostrarMensaje("Programa iniciado ...");
+           control.cargarDatos();
         setVisible(true);
     }
     
     @Override
     public void update(Observable modelo, Object evento) {
-        
-//        if(evento instanceof String)
-//            estado.mostrarMensaje(String.format("Actualización (%s): %s", modelo,evento));
-//        
-//        if(evento instanceof Persona){
-//            Persona persona = (Persona)evento;
-//            tablaDatos.repaint();
-//            JOptionPane.showMessageDialog(null, "Se agrego exitosamente " + persona);
-//            
-//        }
-//        if(evento instanceof Integer){
-//            tablaDatos.repaint(); 
-//            JOptionPane.showMessageDialog(null,String.format("Se elimino exitosamente el registro: %d", ((Integer)evento + 1)));
-//            
-//        }
+         tablaDatos.repaint();
+        if(evento instanceof String){
+            estado.mostrarMensaje(String.format("Actualización (%s): %s", modelo,evento));
+         tablaDatos.revalidate();
+        }
+        if(evento instanceof Alumno){
+            Persona persona = (Alumno)evento;
+            tablaDatos.repaint();
+            JOptionPane.showMessageDialog(null, "Se agrego exitosamente " + persona.getCedula());
+            
+        }
+        if(evento instanceof Integer){
+           // tablaDatos.repaint(); 
+           // JOptionPane.showMessageDialog(null,String.format("Se elimino exitosamente el registro: %d", ((Integer)evento + 1)));
+           int tipoUsuario = (Integer)evento;
+            
+        }
     }
     
     //Atributos
@@ -249,7 +270,9 @@ public class VentanaTabla extends JFrame implements Observer{
     private JTable tablaDatos;
     private JPanel panelEncabezado;
     private JPanel panelTabla;
+    private JPanel panelUsuario;
     private JLabel lbSubtitulo;
+    private JLabel lbUsuario;
     
     private JTextField txtId;
     private JTextField txtNombre;

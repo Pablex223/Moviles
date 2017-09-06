@@ -12,7 +12,9 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import Modelo.*;
+import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -45,7 +47,37 @@ public class AccesoDB {
             System.err.println(e.getMessage());
         }
     }
+     public void getTodosAlumnos(ConjuntoPersonas resultado){
+        try {
+             ConexionBD bd = new ConexionBD();
+            bd.Connect();
+            bd.comando = bd.conexion.createStatement();
+            String comandoListar = "select * from PERSONA";
+            bd.registro = bd.comando.executeQuery(comandoListar);
+            while (bd.registro.next()) {
+                resultado.agregar(alumno( bd.registro));
+            }
+        } catch (SQLException ex) { System.out.print("error personas"); }
 
+       }
+      private Alumno alumno(ResultSet rs){
+        try {
+            Alumno a= new Alumno();
+           a.setCedula(rs.getString("cedula"));
+                a.setClave(rs.getString("pass"));
+                a.setEmail(rs.getString("correo"));
+                a.setNombre(rs.getString("nombre"));
+                a.setTelefono(rs.getInt("telefono"));
+                a.setTipo(rs.getInt("tipo"));
+                //if(a instanceof Alumno)
+                a.setF_nac(rs.getString("F_NACIMIENTO"));
+                a.setCarrera(rs.getString("carrera"));
+            return a;
+        } catch (SQLException ex) {
+            System.out.print("error ciudad s");
+            return null;
+        }
+    }
     //<editor-fold desc="Metodos de Busqueda">
     public void BuscarCursoCod(Curso a, String cod) {
         try {
