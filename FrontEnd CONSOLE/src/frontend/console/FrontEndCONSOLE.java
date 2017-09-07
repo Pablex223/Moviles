@@ -5,6 +5,8 @@
  */
 package frontend.console;
 
+import frontend.console.vista.Interfaz;
+
 /**
  *
  * @author luisf
@@ -15,7 +17,8 @@ public class FrontEndCONSOLE {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+         Interfaz in= new Interfaz();
+            in.init();
     }
     
 }
