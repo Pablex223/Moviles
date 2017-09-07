@@ -199,8 +199,28 @@ public class VentanaTabla extends JFrame implements Observer{
         btnAgregar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                Persona nuevoAlumno = new Alumno(8999, "correo", "Pepe", "zzz", "1/1/1", "root", "IDS");
+                int telefono = Integer.parseInt(txtTelefono.getText());
+                String cedula = txtId.getText();
+                String nombre = txtNombre.getText() + ' ' + txtApellido.getText();
+                String email = txtEmail.getText();
+                String fechaNac = txtFechaNacimiento.getText();
+                String clave = "root";
+                String carrera = "IDS";
+               
+                Persona nuevoAlumno = new Alumno(telefono, email, nombre, cedula, fechaNac, clave, carrera);
                 control.agregar(nuevoAlumno);
+  
+            }
+        });
+        btnEliminar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //control.eliminar(tablaDatos.getSelectedRow());
+                 String cedulaEliminar = (String) tablaDatos.getModel().getValueAt(tablaDatos.getSelectedRow(),3);
+                 Persona personaEliminar = new Persona(0);
+                 personaEliminar.setCedula(cedulaEliminar);
+                 System.out.println(cedulaEliminar);
+                 control.eliminar(personaEliminar);
             }
         });
     }
@@ -222,15 +242,7 @@ public class VentanaTabla extends JFrame implements Observer{
 
             
         });
-        
-        
-//        tabla.getColumnModel().getColumn(0).setPreferredWidth(48);
-//        tabla.getColumnModel().getColumn(1).setPreferredWidth(120);
-//        tabla.getColumnModel().getColumn(2).setPreferredWidth(120);
-//        tabla.getColumnModel().getColumn(3).setPreferredWidth(36);
-//        tabla.getColumnModel().getColumn(4).setPreferredWidth(24);
-        
-        
+
     }
     
     
@@ -239,21 +251,21 @@ public class VentanaTabla extends JFrame implements Observer{
     public void iniciar(){        
         control.registrar(this);
         estado.mostrarMensaje("Programa iniciado ...");
-           control.cargarDatos();
+        control.cargarDatos();
         setVisible(true);
     }
     
     @Override
     public void update(Observable modelo, Object evento) {
-         tablaDatos.repaint();
+      
         if(evento instanceof String){
-            estado.mostrarMensaje(String.format("Actualización (%s): %s", modelo,evento));
-         tablaDatos.revalidate();
+            estado.mostrarMensaje(String.format("Actualización --->   %s",evento));
+           tablaDatos.repaint();
         }
-        if(evento instanceof Alumno){
+        if(evento instanceof Persona){
             Persona persona = (Alumno)evento;
-            tablaDatos.repaint();
-            JOptionPane.showMessageDialog(null, "Se agrego exitosamente " + persona.getCedula());
+//            tablaDatos.revalidate();
+//            JOptionPane.showMessageDialog(null, "Se agrego exitosamente " + persona.getCedula());
             
         }
         if(evento instanceof Integer){

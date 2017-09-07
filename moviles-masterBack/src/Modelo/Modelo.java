@@ -7,6 +7,7 @@ package Modelo;
 
 import AccesoDatos.AccesoDB;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Observable;
 import javax.swing.table.TableModel;
 
@@ -18,7 +19,7 @@ public class Modelo extends Observable{
     
     public Modelo(){
           this.accesoD = new AccesoDB();
-        alumnos = new ConjuntoPersonas();
+        alumnos = new ArrayList<>();
         //Al enviar al objeto personas como parámetro al 
         //modelo de la tabla, hace que el modelo de la tabla
         //manipule los mismos objetos del ArrayList de ConjuntoPersonas
@@ -29,18 +30,28 @@ public class Modelo extends Observable{
     public TableModel modeloTabla(){
         return modeloTabla;
     }
+ 
   public void agregar(Persona nuevaPersona){
-        accesoD.agrega(nuevaPersona);
+      String respuesta = "No se pudo agregar la persona: ";
+       if( accesoD.agrega(nuevaPersona) == 1){
+           accesoD.getTodosAlumnos(alumnos);
+          respuesta = "Se agrego la persona: ";
+       }
         setChanged();
-        notifyObservers(nuevaPersona);
-        
-    
+        notifyObservers(respuesta+ nuevaPersona.cedula);
     }
-     public void actualizar(Object evento){
+  public void eliminar(Persona eliminarPersona){
+      String respuesta = "No se pudo eliminar la persona: ";
+       if( accesoD.eliminar(eliminarPersona) == 1){
+          accesoD.getTodosAlumnos(alumnos);
+          respuesta = "Se elimino la persona: ";
+       }
         setChanged();
-        notifyObservers(evento);
+        notifyObservers(respuesta+ eliminarPersona.cedula);
     }
-      public void cargarDatos(){
+     
+
+     public void cargarDatos(){
         accesoD.getTodosAlumnos(alumnos);
        System.out.print(alumnos);
         //Se notifica que el modelo cambio su estado
@@ -52,5 +63,5 @@ public class Modelo extends Observable{
      //Atributo (DAO)
      private final AccesoDB accesoD;
      private ModeloTablaPersonas modeloTabla;
-      private ConjuntoPersonas alumnos;
+      private List<Persona> alumnos;
 }

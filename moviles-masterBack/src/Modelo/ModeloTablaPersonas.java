@@ -2,20 +2,21 @@
 
 package Modelo;
 
+import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 
 public class ModeloTablaPersonas extends AbstractTableModel {
 
-    public ModeloTablaPersonas(ConjuntoPersonas personas){
+    public ModeloTablaPersonas(List<Persona> personas){
         this.personas = personas;
-        System.out.println("Modelo Tabla Personas" + personas.numPersonas());
+        System.out.println("Modelo Tabla Personas" + personas.size());
     }
     
     
     @Override
     public int getRowCount() { 
-        int filas = personas.numPersonas();
+        int filas = personas.size();
         return filas;
     }
 
@@ -30,7 +31,7 @@ public class ModeloTablaPersonas extends AbstractTableModel {
     //que representa la posición del ArrayList correspondiente
     //al valor
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return personas.recuperar(rowIndex).toArray()[columnIndex];
+        return personas.get(rowIndex).toArray()[columnIndex];
     }
     
     
@@ -45,7 +46,7 @@ public class ModeloTablaPersonas extends AbstractTableModel {
     @Override 
     public void setValueAt(Object valor, int rowIndex, int columnIndex){
         //Actualiza el atributo de la persona
-        personas.recuperar(rowIndex).fijarAtributo(valor, columnIndex);
+        personas.get(rowIndex).fijarAtributo(valor, columnIndex);
         //Actualiza la celda del modelo de la tabla
         fireTableCellUpdated(rowIndex, columnIndex);
     }
@@ -64,6 +65,6 @@ public class ModeloTablaPersonas extends AbstractTableModel {
     
     
     //Atributo
-    private ConjuntoPersonas personas;
+    private List<Persona> personas;
     
 }

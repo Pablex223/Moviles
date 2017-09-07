@@ -47,18 +47,19 @@ public class AccesoDB {
             System.err.println(e.getMessage());
         }
     }
-     public void getTodosAlumnos(ConjuntoPersonas resultado){
+     public void getTodosAlumnos( List<Persona> resultado ){
+         resultado.clear();
         try {
              ConexionBD bd = new ConexionBD();
             bd.Connect();
             bd.comando = bd.conexion.createStatement();
             String comandoListar = "select * from PERSONA";
             bd.registro = bd.comando.executeQuery(comandoListar);
+            
             while (bd.registro.next()) {
-                resultado.agregar(alumno( bd.registro));
-            }
+                resultado.add(alumno( bd.registro));
+            }      
         } catch (SQLException ex) { System.out.print("error personas"); }
-
        }
       private Alumno alumno(ResultSet rs){
         try {
@@ -857,7 +858,7 @@ public class AccesoDB {
 
     //</editor-fold>
     //<editor-fold desc="Metodos de Insercion">
-    public void agrega(Persona a) {
+    public int agrega(Persona a) {
         try {
             ConexionBD bd = new ConexionBD();
             bd.Connect();
@@ -868,11 +869,13 @@ public class AccesoDB {
             }
             Statement s = bd.conexion.createStatement();
             String car = (a instanceof Alumno) ? ((Alumno) a).getCarrera() : "";
-            s.executeUpdate("INSERT INTO Persona  VALUES('" + a.getCedula() + "','" + a.getClave() + "','" + a.getTipo() + "','" + a.getNombre() + "','" + fec + "','" + a.getEmail() + "','" + a.getTelefono() + "','" + car + "')");
+            int count = s.executeUpdate("INSERT INTO Persona  VALUES('" + a.getCedula() + "','" + a.getClave() + "','" + a.getTipo() + "','" + a.getNombre() + "','" + fec + "','" + a.getEmail() + "','" + a.getTelefono() + "','" + car + "')");
             bd.closeCon();
+                return count;
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
+               return -1;
         }
     }
 
@@ -1042,20 +1045,19 @@ public class AccesoDB {
     //</editor-fold>  
 
     //<editor-fold desc="Metodos de eliminar">
-    public boolean eliminar(String id) {
+    public int eliminar(Persona personaEliminar) {
         try {
             ConexionBD bd = new ConexionBD();
             bd.Connect();
             Statement s = bd.conexion.createStatement();
-            String sql = "delete from persona WHERE cedula='" + id + "'";
-            s.executeUpdate(sql);
+            String sql = "delete from persona WHERE cedula='" + personaEliminar.getCedula() + "'";
+           int count=   s.executeUpdate(sql);
             bd.closeCon();
-            return true;
+            return count;
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-
+            return -1;
         }
-        return false;
 
     }
 
