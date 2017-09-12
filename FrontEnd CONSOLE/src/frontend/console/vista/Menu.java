@@ -80,4 +80,18 @@ public class Menu {
         return solicitar.leerD();
     }
     
+       public int menunotas(){
+     System.out.println("1 seleccione 1 grupo");
+        System.out.println("2 salir ");
+       return solicitar.leerD();
+    }
+     
+     public int sbmenunota(){
+     System.out.println("1 seleccione 1 Estudiante");
+        System.out.println("2 salir ");
+       return solicitar.leerD();
+    }
+       
+       
+     
 }

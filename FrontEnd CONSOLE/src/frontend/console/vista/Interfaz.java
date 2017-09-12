@@ -39,19 +39,11 @@ public class Interfaz {
                 FuncAdministrativas();
                 break;
             case 2:
-                int opc = 0;
-                while ((opc = nuevamatricula()) != 2) {
-                    if (opc == 1) {
-                        AdminMatricula();
-                    }
-                }
-                break;
-            case 3:
                 FuncProfesor(usr);
                 break;
-            case 4:
-                FuncAlumno();
-                //
+            case 3:
+                //FuncAlumno();
+                
                 break;
             case 0:
                 break;
@@ -132,7 +124,7 @@ public class Interfaz {
        
        
        
-       /*               Profes
+       /*          Admin     Profes
        --------------------------------------------------------------------*/
         private void MostrarProfe() {
         int p = 0;
@@ -221,7 +213,6 @@ public class Interfaz {
      ---------------------------------------------------------------------------------*/ 
        
      
-     
      private void AdminEst() {
         int opc = 0;
         while (opc != 5) {
@@ -246,9 +237,7 @@ public class Interfaz {
         }
     }
       
-     /*                Metodos Administrativos de los alumnos
-     -------------------------------------------------------------------------------*/
-         private void crearEst() {
+     private void crearEst() {
         String ced = solicitar.SolicitaCedulas("Estudiante");
         if (ctrl.existeEst(ced)) {
             System.out.println("Estudiante ya existe, Error");
@@ -334,5 +323,44 @@ public class Interfaz {
      
     /*termina los metodos Amdministrativos de los alumnos
      ---------------------------------------------------------------------------*/
-    
+ 
+       
+       
+       /*Funciones para los profesores*/
+       
+       private void FuncProfesor(String usr) {
+                ArrayList<Grupo> grupos = new ArrayList<>();
+        ctrl.gruposProfe(usr, grupos);
+        System.out.println(grupos.toString());
+        
+        int opc =0;
+        while(opc != 2){
+            opc = menu.menunotas();
+            if(opc == 1){//notas de un grupo
+                String codGrp= solicitar.soliCodGRUPO();
+                ArrayList<Nota> notas = new ArrayList<>();
+                ctrl.notasPgrupo(codGrp, notas);
+                System.out.println(notas.toString());
+                
+                int op = 0;
+                while(op!=2){
+                    op= menu.sbmenunota();
+                    
+                    if(op ==1){//ingresa nota de un estudiante
+                        String Est= solicitar.SolicitaCedulas("estudiante");
+                        Nota n = new Nota();
+                        ctrl.notaEst(codGrp, Est, n);
+                        System.out.println(n.toString());
+                        n.setNota(solicitar.solicitaNota(Est));
+                        ctrl.actualiza(n);
+                    }
+                }
+            }
+        }
+    }
+       
+       
+       
+       
+       
 }

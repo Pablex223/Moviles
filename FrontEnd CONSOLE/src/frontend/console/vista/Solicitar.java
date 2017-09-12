@@ -97,5 +97,19 @@ public class Solicitar {
     }
     
     
+      public String soliCodGRUPO(){
+        System.out.println("digite el codigo de grupo");
+        return leerS();
+    }
+    
+   public float solicitaNota(String Est){
+       float dato=0;
+        System.out.println("Digite la nota para "+Est);
+       Scanner entradaEscaner = new Scanner(System.in);
+        dato = entradaEscaner.nextFloat();
+       return dato;
+   }
+   
+    
     
 }
