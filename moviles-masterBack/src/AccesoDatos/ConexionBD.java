@@ -29,7 +29,7 @@ public class ConexionBD {
     private static final String PROTOCOLO = "jdbc:mysql:";
     private static final String SERVIDOR_POR_DEFECTO = "localhost";
     String usuario = "root";
-    String claveAcceso = "1234";
+    String claveAcceso = "";
     
     public Connection Connect() {
            

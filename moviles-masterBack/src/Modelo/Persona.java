@@ -2,12 +2,12 @@ package Modelo;
 
 public class Persona{
     
-    protected int telefono;
-    protected String email;
-    protected String nombre;
-    protected String cedula;
-    protected int tipo;
-    protected String clave;
+    private int telefono;
+    private String email;
+    private String nombre;
+    private String cedula;
+    private int tipo;
+    private String clave;
 
     public Persona(int telefono, String email, String nombre, String cedula, int tipo, String clave) {
         this.telefono = telefono;
@@ -78,62 +78,13 @@ public class Persona{
     public void setClave(String clave) {
         this.clave = clave;
     }
-    public Object[] toArray(){
-        Object[] r = new Object[6];
-        r[0] = getTelefono();
-        r[1] = getEmail();
-        r[2] = getNombre();
-        r[3] = getCedula();
-        r[4] = getTipo();
-        r[5] = getClave();
-        return r;
-    }
-    
-    public void fijarAtributo(Object aValue, int columnIndex){
-        switch(columnIndex){
-            case 0:
-                setTelefono(((Integer) aValue));
-                break;
-            case 1:
-                setEmail(aValue.toString());
-                break;
-            case 2: 
-                setNombre(aValue.toString());
-                break;
-            case 3:
-                setCedula(aValue.toString());
-                break;
-            case 4:
-                 setTipo(((Integer) aValue));
-                break;
-                 case 5:
-                setClave(aValue.toString());
-                break;
-            default:
-                throw new IndexOutOfBoundsException();
-        }
-    
-    }    
-    
-    public static String[] nombreCampos(){
-        return NOMBRE_CAMPOS;
-    }
-    
-    public static int numCampos(){
-        return Persona.class.getClass().getFields().length;
-    }
 
     @Override
     public String toString() {
         return "Persona{" + "telefono=" + telefono + ", email=" + email + ", nombre=" + nombre + ", cedula=" + cedula + ", tipo=" + tipo + ", clave=" + clave + '}';
     }
-    
-    
-    
-    
-    private static final String[] NOMBRE_CAMPOS = {"Telefono", "Email", "Nombre", "Cedula", "Tipo", "Clave"};
-        
-    
+
+   
   
     
 }

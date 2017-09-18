@@ -12,9 +12,7 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import Modelo.*;
-import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -47,39 +45,8 @@ public class AccesoDB {
             System.err.println(e.getMessage());
         }
     }
-     public void getTodosAlumnos( List<Persona> resultado ){
-         resultado.clear();
-        try {
-             ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            bd.comando = bd.conexion.createStatement();
-            String comandoListar = "select * from PERSONA";
-            bd.registro = bd.comando.executeQuery(comandoListar);
-            
-            while (bd.registro.next()) {
-                resultado.add(alumno( bd.registro));
-            }      
-        } catch (SQLException ex) { System.out.print("error personas"); }
-       }
-      private Alumno alumno(ResultSet rs){
-        try {
-            Alumno a= new Alumno();
-           a.setCedula(rs.getString("cedula"));
-                a.setClave(rs.getString("pass"));
-                a.setEmail(rs.getString("correo"));
-                a.setNombre(rs.getString("nombre"));
-                a.setTelefono(rs.getInt("telefono"));
-                a.setTipo(rs.getInt("tipo"));
-                //if(a instanceof Alumno)
-                a.setF_nac(rs.getString("F_NACIMIENTO"));
-                a.setCarrera(rs.getString("carrera"));
-            return a;
-        } catch (SQLException ex) {
-            System.out.print("error ciudad s");
-            return null;
-        }
-    }
-    //<editor-fold desc="Metodos de Busqueda">
+
+    //<"Metodos de Busqueda">
     public void BuscarCursoCod(Curso a, String cod) {
         try {
             ConexionBD bd = new ConexionBD();
@@ -123,6 +90,9 @@ public class AccesoDB {
         }
     }
 
+    
+    
+    
     public void Cursoencurso(String est, String cur, Nota n) {
         try {
             ConexionBD bd = new ConexionBD();
@@ -167,128 +137,7 @@ public class AccesoDB {
         }
     }
 
-    public void BuscarCursoNom(Curso a, String nom) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            bd.comando = bd.conexion.createStatement();
-            String comandoListar = "SELECT * FROM curso WHERE nombre ='" + nom + "'";
-            bd.registro = bd.comando.executeQuery(comandoListar);
-            while (bd.registro.next()) {
-                a.setCodigo(bd.registro.getString("codigo"));
-                a.setNombre(bd.registro.getString("nombre"));
-                a.setCreditos(bd.registro.getInt("creditos"));
-                a.setHsemanales(bd.registro.getInt("H_SEMANALES"));
-                a.setCarrera(bd.registro.getString("COD_CARRERA"));
-                a.setNum_ciclo(bd.registro.getInt("NUM_CICLO"));
-            }
-            bd.closeCon();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
 
-    public void BuscarCursoCar(ArrayList<Curso> l, String carr) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            bd.comando = bd.conexion.createStatement();
-            String comandoListar = "SELECT * FROM curso WHERE COD_CARRERA ='" + carr + "'";
-            bd.registro = bd.comando.executeQuery(comandoListar);
-            while (bd.registro.next()) {
-                Curso a = new Curso();
-                a.setCodigo(bd.registro.getString("codigo"));
-                a.setNombre(bd.registro.getString("nombre"));
-                a.setCreditos(bd.registro.getInt("creditos"));
-                a.setHsemanales(bd.registro.getInt("H_SEMANALES"));
-                a.setCarrera(bd.registro.getString("COD_CARRERA"));
-                a.setNum_ciclo(bd.registro.getInt("NUM_CICLO"));
-                l.add(a);
-            }
-            bd.closeCon();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
-    public void BuscarCursoCar(ArrayList<Curso> l, String carr, String clc) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            bd.comando = bd.conexion.createStatement();
-            String comandoListar = "SELECT * FROM curso WHERE COD_CARRERA ='" + carr + "' AND NUM_CICLO='"+clc+"'";
-            bd.registro = bd.comando.executeQuery(comandoListar);
-            while (bd.registro.next()) {
-                Curso a = new Curso();
-                a.setCodigo(bd.registro.getString("codigo"));
-                a.setNombre(bd.registro.getString("nombre"));
-                a.setCreditos(bd.registro.getInt("creditos"));
-                a.setHsemanales(bd.registro.getInt("H_SEMANALES"));
-                a.setCarrera(bd.registro.getString("COD_CARRERA"));
-                a.setNum_ciclo(bd.registro.getInt("NUM_CICLO"));
-                l.add(a);
-            }
-            bd.closeCon();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    public void BuscarCursosCar(Curso x, String carrera, ArrayList<Curso> l) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            bd.comando = bd.conexion.createStatement();
-            String comandoListar = "SELECT * FROM curso WHERE COD_CARRERA ='" + carrera + "'";
-            bd.registro = bd.comando.executeQuery(comandoListar);
-            while (bd.registro.next()) {
-                Curso a = new Curso();
-                a.setNum_ciclo(bd.registro.getInt("Num_ciclo"));
-                a.setNombre(bd.registro.getString("nombre"));
-                a.setCreditos(bd.registro.getInt("creditos"));
-                a.setHsemanales(bd.registro.getInt("H_SEMANALES"));
-                a.setCodigo(bd.registro.getString("codigo"));
-                a.setNum_ciclo(bd.registro.getInt("NUM_CICLO"));
-                l.add(a);
-            }
-            bd.closeCon();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    public void BuscarCarreraCod(Carrera a, String cod) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            bd.comando = bd.conexion.createStatement();
-            String comandoListar = "SELECT * FROM carrera WHERE codigo ='" + cod + "'";
-            bd.registro = bd.comando.executeQuery(comandoListar);
-            while (bd.registro.next()) {
-                a.setCodigo(bd.registro.getString("codigo"));
-                a.setNombre(bd.registro.getString("nombre"));
-            }
-            bd.closeCon();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    public void BuscarCarreraNom(Carrera a, String nom) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            bd.comando = bd.conexion.createStatement();
-            String comandoListar = "SELECT * FROM carrera WHERE nombre ='" + nom + "'";
-            bd.registro = bd.comando.executeQuery(comandoListar);
-            while (bd.registro.next()) {
-                a.setCodigo(bd.registro.getString("codigo"));
-                a.setNombre(bd.registro.getString("nombre"));
-            }
-            bd.closeCon();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
 
     public void BuscarEStId(Persona a, String id) {
         try {
@@ -513,24 +362,24 @@ public class AccesoDB {
         }
     }
 
-    public void mostrarCAs(ArrayList<Carrera> l) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            bd.comando = bd.conexion.createStatement();
-            String comandoListar = "SELECT * FROM carrera";
-            bd.registro = bd.comando.executeQuery(comandoListar);
-            while (bd.registro.next()) {
-                Carrera a = new Carrera();
-                a.setCodigo(bd.registro.getString("CODIGO"));
-                a.setNombre(bd.registro.getString("NOMBRE"));
-                l.add(a);
-            }
-            bd.closeCon();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
+//    public void mostrarCAs(ArrayList<Carrera> l) {
+//        try {
+//            ConexionBD bd = new ConexionBD();
+//            bd.Connect();
+//            bd.comando = bd.conexion.createStatement();
+//            String comandoListar = "SELECT * FROM carrera";
+//            bd.registro = bd.comando.executeQuery(comandoListar);
+//            while (bd.registro.next()) {
+//                Carrera a = new Carrera();
+//                a.setCodigo(bd.registro.getString("CODIGO"));
+//                a.setNombre(bd.registro.getString("NOMBRE"));
+//                l.add(a);
+//            }
+//            bd.closeCon();
+//        } catch (Exception e) {
+//            System.err.println(e.getMessage());
+//        }
+//    }
 
     public void mostrar(Ciclo a, ArrayList<Ciclo> l) {
         try {
@@ -742,30 +591,9 @@ public class AccesoDB {
             System.err.println(e.getMessage());
         }
     }
+    
 
-    public void Historial(String a, ArrayList<Nota> l) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            bd.comando = bd.conexion.createStatement();
-            String comandoListar = "SELECT * FROM NOTA WHERE condicion !='encurso' AND ESTUDIANTE='" + a+"'";
-            bd.registro = bd.comando.executeQuery(comandoListar);
-            while (bd.registro.next()) {
-                Nota n = new Nota();
-                n.setCURSO(bd.registro.getString("curso"));
-                n.setCondision(bd.registro.getString("condicion"));
-                n.setESTUDIANTE(bd.registro.getString("estudiante"));
-                n.setGrupo(bd.registro.getString("Grupo"));
-                n.setNOTA(bd.registro.getFloat("nota"));
-              
-               l.add(n);
-            }
-            bd.closeCon();
-
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
+    
     public void EstDeGrupo(String cod_Car,int num_Grupo, ArrayList<Nota> l) {
         try {
             ConexionBD bd = new ConexionBD();
@@ -833,32 +661,11 @@ public class AccesoDB {
         }
     }
     
-    public void Matriculados(String w, ArrayList<Nota> l) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            bd.comando = bd.conexion.createStatement();
-            String comandoListar = "SELECT * FROM NOTA WHERE CONDICION = 'encurso' AND ESTUDIANTE='" + w + "'";
-            bd.registro = bd.comando.executeQuery(comandoListar);
-            while (bd.registro.next()) {
-                Nota n = new Nota();
-                n.setCURSO(bd.registro.getString("curso"));
-                n.setCondision(bd.registro.getString("condicion"));
-                n.setESTUDIANTE(bd.registro.getString("estudiante"));
-                n.setGrupo(bd.registro.getString("grupo"));
-                n.setNOTA(bd.registro.getInt("nota"));
-                l.add(n);
-            }
-            bd.closeCon();
-
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    //</editor-fold>
-    //<editor-fold desc="Metodos de Insercion">
-    public int agrega(Persona a) {
+   
+    
+    
+    //"Metodos de Insercion">
+    public void agrega(Persona a) {
         try {
             ConexionBD bd = new ConexionBD();
             bd.Connect();
@@ -869,42 +676,14 @@ public class AccesoDB {
             }
             Statement s = bd.conexion.createStatement();
             String car = (a instanceof Alumno) ? ((Alumno) a).getCarrera() : "";
-            int count = s.executeUpdate("INSERT INTO Persona  VALUES('" + a.getCedula() + "','" + a.getClave() + "','" + a.getTipo() + "','" + a.getNombre() + "','" + fec + "','" + a.getEmail() + "','" + a.getTelefono() + "','" + car + "')");
+            s.executeUpdate("INSERT INTO Persona  VALUES('" + a.getCedula() + "','" + a.getClave() + "','" + a.getTipo() + "','" + a.getNombre() + "','" + fec + "','" + a.getEmail() + "','" + a.getTelefono() + "','" + car + "')");
             bd.closeCon();
-                return count;
 
         } catch (SQLException e) {
             System.err.println(e.getMessage());
-               return -1;
         }
     }
 
-    public void matricula(Nota n) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            Statement s = bd.conexion.createStatement();
-            s.executeUpdate("INSERT INTO nota VALUES("
-                    + n.getNOTA() + ",'" + n.getCURSO() + "','"
-                    + n.getESTUDIANTE() + "','" + n.getGrupo() + "','" + n.getCondision() + "')");
-            bd.closeCon();
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
-    public void agrega(Carrera a) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            String fec = "";
-            Statement s = bd.conexion.createStatement();
-            s.executeUpdate("INSERT INTO carrera  VALUES('" + a.getCodigo() + "','" + a.getNombre() + "')");
-            bd.closeCon();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-    }
 
     public void agrega(Curso a) {
         try {
@@ -951,8 +730,9 @@ public class AccesoDB {
         }
     }
 
-    //</editor-fold>
-    //<editor-fold desc="Metodos de Actualizar">
+    
+   
+    //<"Metodos de Actualizar">
     public void Actualiza(Persona a) {
         try {
             ConexionBD bd = new ConexionBD();
@@ -971,20 +751,7 @@ public class AccesoDB {
         }
     }
 
-    public void Actualiza(Carrera a) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            String sql = "update Carrera set NOMBRE = '" + a.getNombre() + "' WHERE codigo = '" + a.getCodigo() + "'";
-            sql = String.format(sql, a.getNombre(), a.getCodigo());
-            Statement s = bd.conexion.createStatement();
-            s.executeUpdate(sql);
-            bd.closeCon();
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-        }
-    }
-
+  
     public void Actualiza(Curso a) {
         try {
             ConexionBD bd = new ConexionBD();
@@ -1042,31 +809,18 @@ public class AccesoDB {
             System.err.println(e.getMessage());
         }
     }
-    //</editor-fold>  
+    
 
-    //<editor-fold desc="Metodos de eliminar">
-    public int eliminar(Persona personaEliminar) {
+    
+   
+    
+    //"Metodos de eliminar">
+    public boolean eliminar(String id) {
         try {
             ConexionBD bd = new ConexionBD();
             bd.Connect();
             Statement s = bd.conexion.createStatement();
-            String sql = "delete from persona WHERE cedula='" + personaEliminar.getCedula() + "'";
-           int count=   s.executeUpdate(sql);
-            bd.closeCon();
-            return count;
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-            return -1;
-        }
-
-    }
-
-    public boolean Desmatricula(String id, String cod) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            Statement s = bd.conexion.createStatement();
-            String sql = "delete from Nota WHERE Curso='" + cod + "' AND ESTUDIANTE ='" + id + "' AND CONDICION = 'encurso'";
+            String sql = "delete from persona WHERE cedula='" + id + "'";
             s.executeUpdate(sql);
             bd.closeCon();
             return true;
@@ -1078,29 +832,7 @@ public class AccesoDB {
 
     }
 
-    public boolean estaECurso(Nota n, String ced, String curs) {
 
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            Statement s = bd.conexion.createStatement();
-            String comandoListar
-                    = "SELECT Curso FROM NOTA WHERE CURSO ='" + curs + "' AND ESTUDIANTE='" + ced + "' AND CONDICION = encurso";
-            bd.registro = bd.comando.executeQuery(comandoListar);
-            if (bd.registro.next()) {
-                n.setCURSO(bd.registro.getString("curso"));
-                n.setCondision(bd.registro.getString("condicion"));
-                n.setESTUDIANTE(bd.registro.getString("estudiante"));
-                n.setGrupo(bd.registro.getString("grupo"));
-                n.setNOTA(bd.registro.getInt("nota"));
-                return true;
-            }
-            bd.closeCon();
-        } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
-        }
-        return false;
-    }
 
     public String pasoCurso(String ced, String curs) {
 
@@ -1121,40 +853,29 @@ public class AccesoDB {
         return "";
     }
 
-    public boolean eliminarCurso(String id) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            Statement s = bd.conexion.createStatement();
-            String sql = "delete from curso WHERE CODIGO='" + id + "'";
-            s.executeUpdate(sql);
-            bd.closeCon();
-            return true;
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
+//    public boolean eliminarCurso(String id) {
+//        try {
+//            ConexionBD bd = new ConexionBD();
+//            bd.Connect();
+//            Statement s = bd.conexion.createStatement();
+//            String sql = "delete from curso WHERE CODIGO='" + id + "'";
+//            s.executeUpdate(sql);
+//            bd.closeCon();
+//            return true;
+//        } catch (SQLException e) {
+//            System.err.println(e.getMessage());
+//
+//        }
+//        return false;
+//
+//    }
 
-        }
-        return false;
-
-    }
-
-    public boolean eliminarCarrera(String id) {
-        try {
-            ConexionBD bd = new ConexionBD();
-            bd.Connect();
-            Statement s = bd.conexion.createStatement();
-            String sql = "delete from carrera WHERE CODIGO='" + id + "'";
-            s.executeUpdate(sql);
-            bd.closeCon();
-            return true;
-        } catch (SQLException e) {
-            System.err.println(e.getMessage());
-
-        }
-        return false;
-
-    }
-    //</editor-fold> 
+  
+    
+    
+    
+    
+    
 
     public void ofertaAcd(String Carrera, int ciclo, ArrayList<Curso> l) {
         try {

@@ -8,7 +8,7 @@ public class Moviles {
     public static void main(String[] args) {
 
      
-       //Control ctrl  = new Control();
+       Control ctrl  = new Control();
         System.out.println("se creo el .jar");
       
     }
