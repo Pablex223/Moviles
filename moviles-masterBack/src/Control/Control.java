@@ -26,25 +26,25 @@ public class Control {
         accesoD.agrega(c);
     }
 
-    public boolean BorrarCurso(String cod) {
-        return accesoD.eliminarCurso(cod);
-    }
-
-    public void MostrarCurso(Curso C, String cod, int t) {
-        if (t == 1) {
-            accesoD.BuscarCursoNom(C, cod);
-        }
-        if (t == 2) {
-            accesoD.BuscarCursoCod(C, cod);
-        }
-    }
-    public void MostrarCursos(ArrayList<Curso> l, String cod, String clc) {
-        accesoD.BuscarCursoCar(l, cod, clc);
-    }
-
-    public void MostrarCursos(ArrayList<Curso> l, String cod) {
-        accesoD.BuscarCursoCar(l, cod);
-    }
+//    public boolean BorrarCurso(String cod) {
+//        return accesoD.eliminarCurso(cod);
+//    }
+//
+//    public void MostrarCurso(Curso C, String cod, int t) {
+//        if (t == 1) {
+//            accesoD.BuscarCursoNom(C, cod);
+//        }
+//        if (t == 2) {
+//            accesoD.BuscarCursoCod(C, cod);
+//        }
+//    }
+//    public void MostrarCursos(ArrayList<Curso> l, String cod, String clc) {
+//        accesoD.BuscarCursoCar(l, cod, clc);
+//    }
+//
+//    public void MostrarCursos(ArrayList<Curso> l, String cod) {
+//        accesoD.BuscarCursoCar(l, cod);
+//    }
 
     public void ActualizarCurso(Curso c) {
         accesoD.Actualiza(c);
@@ -173,13 +173,13 @@ public class Control {
     }
 
 
-    public void ConsultaHistorial(String ced, ArrayList<Nota> l) {
-        accesoD.Historial(ced, l);
-    }
-
-    public void matriculados(String ced, ArrayList<Nota> l) {
-        accesoD.Matriculados(ced, l);
-    }
+//    public void ConsultaHistorial(String ced, ArrayList<Nota> l) {
+//        accesoD.Historial(ced, l);
+//    }
+//
+//    public void matriculados(String ced, ArrayList<Nota> l) {
+//        accesoD.Matriculados(ced, l);
+//    }
 
    
     
