@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.pablo.lab9db.MainActivity">
+
+
+
+    <TextView
+        android:id="@+id/estLabel"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:gravity="center"
+        android:padding="2dp"
+        android:text="Matricula"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        tools:layout_editor_absoluteY="16dp"
+        tools:layout_editor_absoluteX="138dp" />
+
+    <Button
+        android:id="@+id/botonCursos"
+        android:layout_width="111dp"
+        android:layout_height="62dp"
+        android:layout_below="@+id/botonEstudiantes"
+        android:layout_centerHorizontal="true"
+        android:text="Cursos"
+        tools:layout_editor_absoluteY="108dp"
+        tools:layout_editor_absoluteX="200dp" />
+
+    <Button
+        android:id="@+id/botonEstudiantes"
+        android:layout_width="118dp"
+        android:layout_height="62dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:text="Estudiantes"
+        tools:layout_editor_absoluteY="108dp"
+        tools:layout_editor_absoluteX="46dp" />
+
+
+
+
+
+</android.support.constraint.ConstraintLayout>
