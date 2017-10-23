@@ -41,7 +41,7 @@ public class EstudiantesFragment extends Fragment {
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         control=Control.getInstance(getContext());
         initializeList();
-        getActivity().setTitle("Lista de Estudiantes");
+        getActivity().setTitle("Lista de Cursos");
     }
 
     public void initializeList() {

@@ -10,7 +10,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,7 +27,7 @@ public class FormCursoActivity extends Activity {
     EditText nombreCurso;
     EditText descripcion;
     EditText creditos;
-    CheckBox check;
+    Spinner spinner;
     Button guardar;
     int accion = 0; // 1 si es guardar 2 si es actualizar
     Curso mCurso;
@@ -45,7 +44,7 @@ public class FormCursoActivity extends Activity {
         this.descripcion = (EditText) findViewById(R.id.descripcion);
         this.creditos = (EditText) findViewById(R.id.creditos);
         this.guardar = (Button) findViewById(R.id.guardarCurso);
-        this.check = (CheckBox) findViewById(R.id.selectOption);
+        this.spinner=(Spinner) findViewById(R.id.spinnerEstudiante);
 
         // <-- jalar accion del intent y setearla
         Bundle extras = getIntent().getExtras();
@@ -75,7 +74,6 @@ public class FormCursoActivity extends Activity {
             final ArrayAdapter<String> spinner_carreras = new  ArrayAdapter<String>(this,android.R.layout.simple_spinner_dropdown_item, nombresEstudiantes);
 
             spinner.setAdapter(spinner_carreras);
-
 
             this.guardar.setOnClickListener(new View.OnClickListener() {
                 @Override

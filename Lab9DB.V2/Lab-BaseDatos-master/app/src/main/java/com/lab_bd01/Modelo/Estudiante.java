@@ -3,6 +3,7 @@ package com.lab_bd01.Modelo;
 import java.io.Serializable;
 
 
+
 public class Estudiante implements Serializable {
     int id;
     String nombre;

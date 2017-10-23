@@ -2,6 +2,10 @@ package com.lab_bd01.Modelo;
 
 import java.io.Serializable;
 
+/**
+ * Created by SheshoVega on 28/05/2017.
+ */
+
 public class Curso implements Serializable {
     int id;
     String nombre;

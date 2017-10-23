@@ -150,10 +150,11 @@
             android:textStyle="bold"
             android:gravity="center|left"/>
 
-        <CheckBox
-            android:id="@+id/selectOption"
+        <Spinner
+            android:id="@+id/spinnerEstudiante"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            />
 
     </LinearLayout>
 
