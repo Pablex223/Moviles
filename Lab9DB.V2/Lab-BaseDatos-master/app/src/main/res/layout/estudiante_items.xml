@@ -1,0 +1,140 @@
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/card_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    card_view:cardCornerRadius="4dp">
+
+    <TableLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="*">
+        <TableRow>
+            <TextView
+                android:id="@+id/idEstudianteLabel"
+                android:layout_width="50dp"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="ID:"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/idEstudianteText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="id"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold"
+               />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/nombreEstudianteLabel"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="Nombre:"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/nombreEstudianteText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="nombre"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/apellido1EstudianteLabel"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="1er Apellido:"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/apellido1EstudianteText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="1er apellido"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/apellido2EstudianteLabel"
+                android:layout_width="125dp"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="2do Apellido:"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/apellido2EstudianteText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="2do apellido"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/edadEstudianteLabel"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="Edad:"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/edadEstudianteText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="edad"
+                android:textSize="@dimen/text_size"
+                android:textStyle="bold" />
+        </TableRow>
+        <TableRow>
+                <ImageView
+                    android:id="@+id/editEstudiante"
+                    android:layout_width="@dimen/icon_width"
+                    android:layout_height="@dimen/icon_height"
+                    android:padding="@dimen/icon_padding"
+                    android:src="@drawable/edit" />
+
+                <ImageView
+                    android:id="@+id/deleteEstudiante"
+                    android:layout_width="@dimen/icon_width"
+                    android:layout_height="@dimen/icon_height"
+                    android:padding="@dimen/icon_padding"
+                    android:src="@drawable/remove" />
+        </TableRow>
+        <TableRow>
+            <TextView
+                android:id="@+id/cursosDeEstudiante"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="2dp"
+                android:text="@string/cursos_estudiante"
+                android:textSize="14dp"
+                android:layout_marginTop="25dp"
+                android:textColor="@color/colorPrimary"
+                android:layout_span="2"
+                />
+        </TableRow>
+    </TableLayout>
+
+
+
+
+
+
+</android.support.v7.widget.CardView>
