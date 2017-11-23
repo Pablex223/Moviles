@@ -79,10 +79,14 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
+        FragmentManager manager = getSupportFragmentManager();
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            IngresarUsuario ingresarUsuario = new IngresarUsuario();
+            manager.beginTransaction().replace(R.id.contenedor,
+                    ingresarUsuario,
+                    ingresarUsuario.getTag()).commit();
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -91,7 +95,6 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_share) {
             AcercaDe acercaDe = new AcercaDe();
-            FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction().replace(R.id.contenedor,
                     acercaDe,
                     acercaDe.getTag()).commit();

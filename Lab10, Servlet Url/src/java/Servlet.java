@@ -33,6 +33,7 @@ public final class Servlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
+            System.out.println("conectandose...");
             String act;
             if((act = request.getParameter("action")) != null){
                 switch(act){
@@ -46,6 +47,7 @@ public final class Servlet extends HttpServlet {
             }
             
         }catch(JSONException | SQLException | ClassNotFoundException ex) {
+            System.out.println(ex.toString());
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
         }
     }

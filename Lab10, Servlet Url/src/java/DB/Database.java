@@ -65,7 +65,7 @@ public final class Database {
 
     private static final String USUARIO = "root";
 //    private static final String CLAVE = "root";
-    private static final String CLAVE = "lespaul23";
+    private static final String CLAVE = "root";
     private static final String BASEDATOS = "jdbc:mysql://localhost:3306/moviles";
     private final Connection cnx;
 }
