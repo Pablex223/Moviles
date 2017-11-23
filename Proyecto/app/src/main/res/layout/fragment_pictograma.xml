@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.javie.proyecto.Pictograma"
+    android:id="@+id/fragment_pictograma">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:id="@+id/pictograma"
+            />
+        <TextView
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginBottom="7dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="Elige una respuesta..."
+            android:textStyle="bold"/>
+        <TableLayout
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="45dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="*">
+            <TableRow>
+                <Button
+                    android:layout_margin="5dp"
+                    android:id="@+id/btnRespuesta1"
+                    android:textColor="#ffff"
+                    android:textStyle="bold"
+                    android:background="@color/colorPrimary"
+                    android:text="respuesta 1"/>
+                <Button
+                    android:layout_margin="5dp"
+                    android:id="@+id/btnRespuesta2"
+                    android:textColor="#ffff"
+                    android:textStyle="bold"
+                    android:background="@color/colorAccent"
+                    android:text="respuesta 2"/>
+            </TableRow>
+            <TableRow>
+                <Button
+                    android:layout_margin="5dp"
+                    android:id="@+id/btnRespuesta3"
+                    android:textColor="#ffff"
+                    android:textStyle="bold"
+                    android:background="#fff000"
+                    android:text="respuesta 3"/>
+                <Button
+                    android:layout_margin="5dp"
+                    android:id="@+id/btnRespuesta4"
+                    android:textColor="#ffff"
+                    android:textStyle="bold"
+                    android:background="#33cc33"
+                    android:text="respuesta 4"/>
+            </TableRow>
+        </TableLayout>
+
+    </LinearLayout>
+
+
+</FrameLayout>
