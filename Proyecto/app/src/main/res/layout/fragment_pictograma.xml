@@ -3,21 +3,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.javie.proyecto.Pictograma"
+    tools:context="com.example.javie.proyecto.CrearPictogramas"
     android:id="@+id/fragment_pictograma">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
+        <TableLayout
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="7dp"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+           >
+           <TableRow>
+               <TextView
+                   android:text="Respuestas Correctas: "
+                   android:layout_weight="0"
+                   android:textStyle="bold"
+                   />
+               <TextView
+                   android:text="0"
+                   android:id="@+id/txtRespuestasCorrectas"
+                   android:textStyle="bold"
+                   />
+           </TableRow>
+        </TableLayout>
         <ImageView
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:layout_marginTop="50dp"
+            android:layout_marginTop="7dp"
             android:layout_marginBottom="10dp"
             android:layout_width="match_parent"
             android:layout_height="260dp"
-            android:id="@+id/pictograma"
+            android:id="@+id/imgPictograma"
             />
         <TextView
             android:layout_marginLeft="50dp"

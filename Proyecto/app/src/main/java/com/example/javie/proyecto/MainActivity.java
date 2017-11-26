@@ -88,10 +88,10 @@ public class MainActivity extends AppCompatActivity
                     ingresarUsuario,
                     ingresarUsuario.getTag()).commit();
         } else if (id == R.id.nav_gallery) {
-            Pictograma pictograma = new Pictograma();
+            CrearPictogramas pictogramas = new CrearPictogramas();
             manager.beginTransaction().replace(R.id.contenedor,
-                    pictograma,
-                    pictograma.getTag()).commit();
+                    pictogramas,
+                    pictogramas.getTag()).commit();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
