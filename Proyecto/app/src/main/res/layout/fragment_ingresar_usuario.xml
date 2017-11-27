@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.javie.proyecto.AcercaDe"
-    android:id="@+id/fragment_ingresar_usuario">
+    tools:context="com.example.javie.proyecto.IngresarUsuario"
+    android:id="@+id/fragment_ingresar_usuario"
+    android:background="@drawable/backgroud">
 
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -30,7 +31,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"
-                    android:hint="Usuario" />
+                    android:textColor="#ffff"
+                    android:hint="Usuario"
+                  />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -45,7 +48,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textPassword"
-                    android:hint="Contraseña"/>
+                    android:hint="Contraseña"
+                    android:textColor="#ffff"
+                    />
             </android.support.design.widget.TextInputLayout>
 
 
@@ -69,6 +74,7 @@
                 android:layout_marginBottom="24dp"
                 android:text="¿No es miembro? Crea una cuenta"
                 android:gravity="center"
+                android:textColor="#ffff"
                 android:textSize="16dip"/>
 
 
