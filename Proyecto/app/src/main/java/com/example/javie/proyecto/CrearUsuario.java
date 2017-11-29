@@ -1,6 +1,8 @@
 package com.example.javie.proyecto;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -24,6 +26,12 @@ public class CrearUsuario extends Fragment {
     Button btnCrearCuenta;
     EditText txtNombre, txtEmail, txtContrasena;
     TextView linkLogin;
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String CONTRASENA = "contrasenaKey";
+    public static final String EMAIL = "emailKey";
+    SharedPreferences sharedpreferences;
+
     public CrearUsuario() {}
 
     @Override
@@ -36,6 +44,8 @@ public class CrearUsuario extends Fragment {
         txtEmail = (EditText) view.findViewById(R.id.txtEmail);
         txtContrasena = (EditText) view.findViewById(R.id.txtContrasena);
         linkLogin = (TextView) view.findViewById(R.id.linkLogin);
+        sharedpreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
+
         linkLogin.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){

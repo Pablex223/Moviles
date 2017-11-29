@@ -7,6 +7,8 @@
     android:id="@+id/fragment_ingresar_usuario"
     android:background="@drawable/backgroud">
 
+    <include  layout="@layout/barra_de_progreso" />
+
     <ScrollView
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="fill_parent"

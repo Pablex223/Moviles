@@ -43,10 +43,10 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         FragmentManager manager = getSupportFragmentManager();
 
-        Inicio inicio = new Inicio();
+        IngresarUsuario ingresarUsuario = new IngresarUsuario();
         manager.beginTransaction().replace(R.id.contenedor,
-                inicio,
-                inicio.getTag()).commit();
+                ingresarUsuario,
+                ingresarUsuario.getTag()).commit();
     }
 
     @Override
