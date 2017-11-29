@@ -47,7 +47,7 @@ public class Inicio extends Fragment {
         sharedpreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
         emailUsuario = sharedpreferences.getString(EMAIL, null);
-        if(emailUsuario != null) txtBienvenido.setText("BIENVENIDO " + emailUsuario);
+        if(emailUsuario != null) txtBienvenido.setText("¡BIENVENIDO " + emailUsuario + "!");
 
 
         btnSalir.setOnClickListener(new View.OnClickListener(){

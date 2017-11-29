@@ -40,7 +40,7 @@
             android:id="@+id/btnSalir"
             android:textColor="#ffff"
             android:textStyle="bold"
-            android:background="@color/colorAccent"
+            android:background="@drawable/round_button"
             android:text="Sailr"
             android:layout_gravity="center_horizontal"/>
 
