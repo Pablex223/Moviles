@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RadioButton;
 import android.widget.Toast;
 
 import com.example.javie.proyecto.Entidades.Pictograma;
@@ -22,7 +23,7 @@ import java.util.List;
 public class CrearPictogramas extends Fragment {
 
     Button btnRespuest1,btnRespuest2,btnRespuest3,btnRespuest4;
-    ImageView imgPictograma;
+    ImageView imgPictograma, mic1,mic2,mic3,mic4;
     List<Pictograma> listaPictogramas;
     int contador;
     public CrearPictogramas() {
@@ -42,6 +43,11 @@ public class CrearPictogramas extends Fragment {
         btnRespuest2 = (Button) view.findViewById(R.id.btnRespuesta2);
         btnRespuest3 = (Button) view.findViewById(R.id.btnRespuesta3);
         btnRespuest4 = (Button) view.findViewById(R.id.btnRespuesta4);
+        mic1 = (ImageView) view.findViewById(R.id.mic1);
+        mic2 = (ImageView) view.findViewById(R.id.mic2);
+        mic3 = (ImageView) view.findViewById(R.id.mic3);
+        mic4 = (ImageView) view.findViewById(R.id.mic4);
+
         imgPictograma = (ImageView) view.findViewById(R.id.imgPictograma);
         imgPictograma.setImageResource(listaPictogramas.get(contador).getId());
 
@@ -50,9 +56,35 @@ public class CrearPictogramas extends Fragment {
         btnRespuest3.setOnClickListener(marcarRespuesta);
         btnRespuest4.setOnClickListener(marcarRespuesta);
 
+        mic1.setOnClickListener(escucharRespuesta);
+        mic2.setOnClickListener(escucharRespuesta);
+        mic3.setOnClickListener(escucharRespuesta);
+        mic4.setOnClickListener(escucharRespuesta);
         return view;
     }
 
+
+
+    private View.OnClickListener escucharRespuesta = new View.OnClickListener() {
+        @Override
+        public void onClick(final View v) {
+            MainActivity myActivity = (MainActivity) getActivity();
+            switch(v.getId()) {
+                case R.id.mic1:
+                    myActivity.speak(btnRespuest1.getText().toString());
+                    break;
+                case R.id.mic2:
+                    myActivity.speak(btnRespuest2.getText().toString());
+                    break;
+                case R.id.mic3:
+                    myActivity.speak(btnRespuest3.getText().toString());
+                    break;
+                case R.id.mic4:
+                    myActivity.speak(btnRespuest4.getText().toString());
+                    break;
+            }
+        }
+    };
     private View.OnClickListener marcarRespuesta = new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
