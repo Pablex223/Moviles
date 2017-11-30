@@ -3,7 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.javie.proyecto.AcercaDe"
-    android:id="@+id/fragement_acerca_de">
+    android:id="@+id/fragement_acerca_de"
+    android:background="@drawable/backgroud">
 
     <!-- TODO: Update blank fragment layout -->
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -16,7 +17,8 @@
             android:layout_height="wrap_content"
             android:textAlignment="center"
             android:text="Aplicación 2017"
-            android:layout_gravity="center_horizontal"/>
+            android:layout_gravity="center_horizontal"
+            android:textColor="#ffff"/>
 
     </LinearLayout>
 
