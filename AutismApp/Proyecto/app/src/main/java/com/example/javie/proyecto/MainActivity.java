@@ -41,6 +41,12 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        FragmentManager manager = getSupportFragmentManager();
+
+        IngresarUsuario ingresarUsuario = new IngresarUsuario();
+        manager.beginTransaction().replace(R.id.contenedor,
+                ingresarUsuario,
+                ingresarUsuario.getTag()).commit();
     }
 
     @Override
@@ -88,10 +94,10 @@ public class MainActivity extends AppCompatActivity
                     ingresarUsuario,
                     ingresarUsuario.getTag()).commit();
         } else if (id == R.id.nav_gallery) {
-            Pictograma pictograma = new Pictograma();
+            CrearPictogramas pictogramas = new CrearPictogramas();
             manager.beginTransaction().replace(R.id.contenedor,
-                    pictograma,
-                    pictograma.getTag()).commit();
+                    pictogramas,
+                    pictogramas.getTag()).commit();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
