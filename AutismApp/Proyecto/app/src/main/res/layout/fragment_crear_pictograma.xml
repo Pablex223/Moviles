@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.javie.proyecto.CrearPictogramas"
+    android:id="@+id/fragment_crear_pictograma"
+    android:background="@drawable/backgroud">
+
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fitsSystemWindows="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_marginLeft="50dp"
+            android:layout_marginRight="50dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:id="@+id/imgFoto"
+            />
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:stretchColumns="*">
+            <TableRow>
+                <Button
+                    android:layout_marginLeft="45dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Tomar Foto"
+                    android:id="@+id/btnFoto"
+                  />
+                <Button
+                    android:layout_marginRight="45dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Subir Foto"
+                    android:id="@+id/btnGaleria"
+                    />
+            </TableRow>
+        </TableLayout>
+
+
+
+        <LinearLayout
+            android:id="@+id/layoutDatosPictograma"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="10dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="24dp"
+            android:visibility="invisible">
+            <!--  Categoria Label -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+
+                <EditText
+                    android:id="@+id/txtCategoriaPic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Categoria"
+                    android:inputType="textCapWords"
+                    android:textColor="#ffff" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!--  Categoria Label -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+
+                <EditText
+                    android:id="@+id/txtRespuestaPic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Respuesta"
+                    android:enabled="false"
+                    android:inputType="textCapWords"
+                    android:textColor="#ffff" />
+            </android.support.design.widget.TextInputLayout>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Guardar"
+                android:id="@+id/btnGuardarPic"
+                android:layout_gravity="center_horizontal"/>
+           </LinearLayout>
+    </LinearLayout>
+
+    </ScrollView>
+</FrameLayout>

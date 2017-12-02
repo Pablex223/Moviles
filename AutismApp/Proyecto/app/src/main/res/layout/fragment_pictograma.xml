@@ -3,10 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.javie.proyecto.CrearPictogramas"
+    tools:context="com.example.javie.proyecto.IniciarPictogramas"
     android:id="@+id/fragment_pictograma"
     android:background="@drawable/backgroud">
 
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fitsSystemWindows="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -63,6 +68,7 @@
                     android:layout_height="60dp"
                     android:orientation="horizontal">
                     <ImageView
+                        android:elevation="20dp"
                         android:src="@drawable/mic"
                         android:id="@+id/mic1"
                         android:layout_width="20dp"
@@ -72,6 +78,7 @@
                         android:layout_height="match_parent"
                         android:layout_width="130dp"
                         android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
                         android:id="@+id/btnRespuesta1"
                         android:textColor="#ffff"
                         android:textStyle="bold"
@@ -87,12 +94,14 @@
                         android:layout_width="130dp"
                         android:layout_marginLeft="12dp"
                         android:layout_marginRight="5dp"
+                        android:layout_marginBottom="5dp"
                         android:id="@+id/btnRespuesta2"
                         android:textColor="#ffff"
                         android:textStyle="bold"
                         android:background="@color/colorAccent"
                         android:text="respuesta 2"/>
                     <ImageView
+                        android:elevation="20dp"
                         android:src="@drawable/mic"
                         android:id="@+id/mic2"
                         android:layout_width="20dp"
@@ -106,6 +115,7 @@
                     android:layout_height="60dp"
                     android:orientation="horizontal">
                     <ImageView
+                        android:elevation="20dp"
                         android:src="@drawable/mic"
                         android:id="@+id/mic3"
                         android:layout_width="20dp"
@@ -115,6 +125,7 @@
                         android:layout_height="match_parent"
                         android:layout_width="130dp"
                         android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
                         android:id="@+id/btnRespuesta3"
                         android:textColor="#ffff"
                         android:textStyle="bold"
@@ -129,6 +140,7 @@
                         android:layout_height="match_parent"
                         android:layout_width="130dp"
                         android:layout_marginLeft="12dp"
+                        android:layout_marginTop="5dp"
                         android:layout_marginRight="5dp"
                         android:id="@+id/btnRespuesta4"
                         android:textColor="#ffff"
@@ -136,6 +148,7 @@
                         android:background="#33cc33"
                         android:text="respuesta 4"/>
                     <ImageView
+                        android:elevation="20dp"
                         android:src="@drawable/mic"
                         android:id="@+id/mic4"
                         android:layout_width="20dp"
@@ -145,7 +158,27 @@
             </TableRow>
         </TableLayout>
 
+        <Button
+            android:id="@+id/btnResponder"
+            android:layout_margin="10dp"
+            android:background="@drawable/round_button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Responder"
+            android:textColor="#ffff"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"/>
+
+        <Button
+            android:id="@+id/btnReinciar"
+            android:layout_margin="5dp"
+            android:background="@drawable/reiniciar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textColor="#ffff"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
-
+    </ScrollView>
 </FrameLayout>

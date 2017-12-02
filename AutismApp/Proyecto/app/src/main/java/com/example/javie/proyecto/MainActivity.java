@@ -1,9 +1,13 @@
 package com.example.javie.proyecto;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -20,6 +24,13 @@ import java.util.Locale;
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     TextToSpeech t1;
+
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String CONTRASENA = "contrasenaKey";
+    public static final String EMAIL = "emailKey";
+    String emailUsuario = "";
+    SharedPreferences sharedpreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +46,7 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
-
-
+        sharedpreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,17 +110,24 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         FragmentManager manager = getSupportFragmentManager();
         int id = item.getItemId();
-
         if (id == R.id.nav_camera) {
-            IngresarUsuario ingresarUsuario = new IngresarUsuario();
-            manager.beginTransaction().replace(R.id.contenedor,
-                    ingresarUsuario,
-                    ingresarUsuario.getTag()).commit();
+            emailUsuario = sharedpreferences.getString(EMAIL, null);
+            if(emailUsuario != null) {
+                Inicio inicio = new Inicio();
+                manager.beginTransaction().replace(R.id.contenedor,
+                        inicio,
+                        inicio.getTag()).commit();
+            } else {
+                IngresarUsuario ingresarUsuario = new IngresarUsuario();
+                manager.beginTransaction().replace(R.id.contenedor,
+                        ingresarUsuario,
+                        ingresarUsuario.getTag()).commit();
+            }
         } else if (id == R.id.nav_gallery) {
-            CrearPictogramas pictogramas = new CrearPictogramas();
+            OpcionesPictogramas opcionesPictogramas = new OpcionesPictogramas();
             manager.beginTransaction().replace(R.id.contenedor,
-                    pictogramas,
-                    pictogramas.getTag()).commit();
+                    opcionesPictogramas,
+                    opcionesPictogramas.getTag()).commit();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
@@ -143,5 +160,14 @@ public class MainActivity extends AppCompatActivity
         }
         super.onPause();
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+//            fragment.onActivityResult(requestCode, resultCode, data);
+//        }
+//    }
 
 }

@@ -8,3 +8,5 @@
 /moviles-masterBack/nbproject/private/
 /FrontEnd CONSOLE/build/
 /AutismApp/AutServlet/nbproject/private/
+*.java
+*.jar
