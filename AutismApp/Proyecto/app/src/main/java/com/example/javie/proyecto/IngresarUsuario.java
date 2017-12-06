@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +22,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.example.javie.proyecto.Entidades.Usuario;
+import com.example.javie.proyecto.Utilidades.CustomRequest;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,8 +58,6 @@ public class IngresarUsuario extends Fragment {
     public static final String CONTRASENA = "contrasenaKey";
     public static final String EMAIL = "emailKey";
     SharedPreferences sharedpreferences;
-
-
 
     public IngresarUsuario() {}
 
@@ -83,44 +90,10 @@ public class IngresarUsuario extends Fragment {
             @Override
             public void onClick(View v){
                   //new JSONTask().execute("https://jsonparsingdemo-cec5b.firebaseapp.com/jsonData/moviesDemoItem.txt", "0");
-                new JSONTask().execute("http://192.168.1.107:8080/AutServlet/", "0");
-//                if(verificarUsuario()){
-//                    Usuario nuevoUsuario = new Usuario();
-//                    String nombre = txtUsuarioIngresar.getText().toString();
-//                    String contrasenna = txtContrasenaIngresar.getText().toString();
-//                    nuevoUsuario.setEmail(nombre);
-//                    nuevoUsuario.setContrasena(contrasenna);
-//
-//                    SharedPreferences.Editor editor = sharedpreferences.edit();
-//
-//                    editor.putString(EMAIL, nombre);
-//                    editor.putString(CONTRASENA, contrasenna);
-//                    editor.commit();
-//
-//                    Toast.makeText(getActivity(), nuevoUsuario.toString(),Toast.LENGTH_SHORT).show();
-//
-//                    progressBar.setVisibility(View.VISIBLE);// To Show ProgressBar
-//
-//                   //Espera 3 segundos para cambiar de pantalla
-//                    Handler handler = new Handler();
-//                    Runnable runnable = new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            //Second fragment after 5 seconds appears
-//                            progressBar.setVisibility(View.INVISIBLE);
-//                            FragmentManager manager = getActivity().getSupportFragmentManager();
-//                            Inicio inicio = new Inicio();
-//                            manager.beginTransaction().replace(R.id.contenedor,
-//                                    inicio,
-//                                    inicio.getTag()).commit();
-//                        }
-//                    };
-//                    handler.postDelayed(runnable, 3000);
-//
-//                }
-//               else{
-//                    Toast.makeText(getActivity(), "Por favor, complete los campos",Toast.LENGTH_SHORT).show();
-//               }
+                if(verificarUsuario())
+                    new JSONTask().execute("http://192.168.1.107:8080/AutServlet/as");
+               else
+                    Toast.makeText(getActivity(), "Por favor, complete los campos",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -146,14 +119,37 @@ public class IngresarUsuario extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
-            HttpURLConnection connection = null;
+            HttpURLConnection conn = null;
             BufferedReader reader = null;
             try{
                 URL url = new URL(params[0]);
-                connection = (HttpURLConnection) url.openConnection();
-                connection.connect();
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                conn.setRequestProperty("Accept","application/json");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
 
-                InputStream stream = connection.getInputStream();
+                JSONObject obj = new JSONObject();
+               obj.put("id", "1");
+               obj.put("name", "myname");
+
+               JSONObject jo = new JSONObject();
+               jo.put("usuario", txtUsuarioIngresar.getText());
+               jo.put("contra", txtContrasenaIngresar.getText());
+
+               JSONObject jo1 = new JSONObject();
+               jo1.put("action", "login");
+               jo1.put("data", jo);
+
+                Log.i("JSON", jo1.toString());
+                DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+                os.writeBytes(jo1.toString());
+
+                os.flush();
+                os.close();
+                InputStream stream = conn.getInputStream();
                 reader = new BufferedReader(new InputStreamReader(stream));
                 StringBuffer buffer = new StringBuffer();
 
@@ -162,50 +158,63 @@ public class IngresarUsuario extends Fragment {
                 while((line = reader.readLine())!= null){
                     buffer.append(line);
                 }
+                String resultado;
+                JSONObject respuesta = new JSONObject(buffer.toString());
+                if(respuesta.getBoolean("login"))
+                    resultado = "true";
+                else resultado = "false";
 
-                String finalJSON = buffer.toString();
-                return finalJSON;
-//                JSONObject parentObject = new JSONObject(finalJSON);
-//                JSONArray parentArrey = parentObject.getJSONArray("movies");
-//                JSONObject finalObject = parentArrey.getJSONObject(0);
-//                String moviename = finalObject.getString("movie");
-//                int year = finalObject.getInt("year");
-//                if(params[1] == "1") {
-//
-//                    return moviename + " - " + year;
-//                }
-//                else {
-//                    return year + " - " + moviename;
-//                }
+                Log.i("RESPONSE", String.valueOf(buffer.toString()));
+                Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                Log.i("MSG" , conn.getResponseMessage());
 
-            }catch(MalformedURLException e){
-                e.printStackTrace();
-            }catch (IOException e){
+
+
+                conn.disconnect();
+
+                return resultado;
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-             finally {
-                if(connection != null)
-                    connection.disconnect();
-                if(reader != null)
-                    try {
-                        reader.close();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-            }
-            return null;
-
+               return  null;
         }
 
         @Override
         protected void onPostExecute(String result){
             super.onPostExecute(result);
-            //btnIngresar.setText(result);
+            if(result.equalsIgnoreCase("true")){
+                Toast.makeText(getActivity(), "Iniciando sesión...",Toast.LENGTH_SHORT).show();
+                String nombre = txtUsuarioIngresar.getText().toString();
+                    String contrasenna = txtContrasenaIngresar.getText().toString();
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                    editor.putString(EMAIL, nombre);
+                    editor.putString(CONTRASENA, contrasenna);
+                    editor.commit();
+
+                    progressBar.setVisibility(View.VISIBLE);// To Show ProgressBar
+
+                   //Espera 3 segundos para cambiar de pantalla
+                    Handler handler = new Handler();
+                    Runnable runnable = new Runnable() {
+                        @Override
+                        public void run() {
+                            //Second fragment after 5 seconds appears
+                            progressBar.setVisibility(View.INVISIBLE);
+                            FragmentManager manager = getActivity().getSupportFragmentManager();
+                            Inicio inicio = new Inicio();
+                            manager.beginTransaction().replace(R.id.contenedor,
+                                    inicio,
+                                    inicio.getTag()).commit();
+                        }
+                    };
+                    handler.postDelayed(runnable, 3000);
+
+                }
+            else
+                Toast.makeText(getActivity(), "Usuario incorrecto",Toast.LENGTH_SHORT).show();
+            }
         }
-    }
 
 
 }

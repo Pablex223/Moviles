@@ -65,20 +65,18 @@
             android:visibility="visible">
 
             <!--  Categoria Label -->
-            <android.support.design.widget.TextInputLayout
+            <Spinner
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:id="@+id/spinnerCategoria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
+                android:entries="@array/categorias_array"
+                android:prompt="@string/categoria_prompt"
+                android:inputType="textCapWords"
+                android:spinnerMode="dropdown"
+                android:textColor="#ffff"/>
 
-                <EditText
-                    android:id="@+id/txtCategoriaPic"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Categoria"
-                    android:inputType="textCapWords"
-                    android:textColor="#ffff" />
-            </android.support.design.widget.TextInputLayout>
 
             <!--  Nombre Label -->
             <android.support.design.widget.TextInputLayout

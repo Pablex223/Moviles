@@ -8,4 +8,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="categoria_prompt">Categoria</string>
+
+    <string-array name="categorias_array">
+        <item>Emocional</item>
+        <item>Alimentación</item>
+        <item>Escuela</item>
+        <item>Entretenimiento</item>
+    </string-array>
+
 </resources>

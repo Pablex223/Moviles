@@ -22,10 +22,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -53,7 +55,8 @@ public class CrearPictogramas extends Fragment {
     //DatabaseHelper myDb;
     Button btnFoto, btnGuardarPic, btnGaleria;
     LinearLayout camposDatos;
-    TextView txtNombrePic, txtCategoriaPic,txtRespuestaPic;
+    TextView txtNombrePic,txtRespuestaPic;
+    private Spinner spinnerCategoria;
     ImageView imgFoto;
     private Uri mImageCaptureUri;
     static final int CAM_REQUEST = 1;
@@ -75,21 +78,14 @@ public class CrearPictogramas extends Fragment {
         btnGaleria = (Button) view.findViewById(R.id.btnGaleria);
         btnGuardarPic = (Button) view.findViewById(R.id.btnGuardarPic);
         txtNombrePic = (TextView) view.findViewById(R.id.txtNombrePic);
-        txtCategoriaPic = (TextView) view.findViewById(R.id.txtCategoriaPic);
+        spinnerCategoria = (Spinner) view.findViewById(R.id.spinnerCategoria);
         txtRespuestaPic = (TextView) view.findViewById(R.id.txtRespuestaPic);
 
         camposDatos = (LinearLayout) view.findViewById(R.id.layoutDatosPictograma);
         btnFoto.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-//                Intent cameraIntent =
-//                        new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-//                cameraIntent.putExtra(android.provider.MediaStore.EXTRA_OUTPUT,
-//                        mImageCaptureUri);
-//
-//                if (cameraIntent.resolveActivity(getActivity().getPackageManager())!=null){
-//                    startActivityForResult(cameraIntent,CAM_REQUEST);
-//                }
+
                 Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 // Ensure that there's a camera activity to handle the intent
                 if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -160,7 +156,17 @@ public class CrearPictogramas extends Fragment {
 
     }
 
+    public void addItemsOnSpinner2() {
 
+        List<String> list = new ArrayList<String>();
+        list.add("list 1");
+        list.add("list 2");
+        list.add("list 3");
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_dropdown_item, list);
+        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerCategoria.setAdapter(dataAdapter);
+    }
 
     private File createImageFile() throws IOException {
         // Create an image file name
@@ -241,10 +247,9 @@ public class CrearPictogramas extends Fragment {
 
 
     private boolean verificarPictograma(){
-        String categoria = txtCategoriaPic.getText().toString();
+        String categoria = String.valueOf(spinnerCategoria.getSelectedItem()).toString();
         String respuesta = txtRespuestaPic.getText().toString();
         if(TextUtils.isEmpty(categoria)) {
-            txtCategoriaPic.setError("Ingrese una categoria!");
             return false;
         }
         else if(TextUtils.isEmpty(respuesta)) {
