@@ -77,6 +77,7 @@ public class Persona implements Serializable {
 
     public Persona(String usuario) {
         this.usuario = usuario;
+        
     }
 
     public static Persona fromJson(JSONObject jo){

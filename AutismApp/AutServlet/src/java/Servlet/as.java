@@ -5,9 +5,11 @@
  */
 package Servlet;
 
+import Modelo.Analisis;
 import Modelo.Persona;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Objects;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -47,6 +49,7 @@ public class as extends HttpServlet {
                 switch(act){
                     case "login": loginAct(response, jo.getJSONObject("data")); break;
                     case "nuevoUsuario": nuevoUsuarioAct(response, jo.getJSONObject("data")) ;break;
+                    case "editarUsuario": editarUsuarioAct(response, jo.getJSONObject("data")) ;break;
                     default:  response.sendError(HttpServletResponse.SC_BAD_REQUEST, "The request sent by the client was syntactically incorrect.");
                 }
             }
@@ -89,6 +92,24 @@ public class as extends HttpServlet {
         
     }
 
+    private void editarUsuarioAct(HttpServletResponse response, JSONObject jsonObject) throws IOException {
+        response.setContentType("application/json");
+        PrintWriter pw = response.getWriter();
+        try{
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("AutServletPU");
+            Persona p = Persona.fromJson(jsonObject);
+            p.setCuentaCollection(new ArrayList<>());
+            //p.setAnalisisid(new Analisis( jsonObject.getInt("analisis")));
+            new PersonaJpaController(emf).edit(p);
+            pw.write( new JSONObject().put("success", "Usuario editado con exito.").toString());
+        }catch(Exception ex){
+            pw.write( new JSONObject().put("error", ex.getMessage()).toString());
+        }
+            pw.flush();             
+        
+    }
+    
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -127,5 +148,4 @@ public class as extends HttpServlet {
     public String getServletInfo() {
         return "Short description";
     }// </editor-fold>
-
 }
