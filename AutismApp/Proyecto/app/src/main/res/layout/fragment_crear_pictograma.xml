@@ -62,7 +62,23 @@
             android:paddingTop="10dp"
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
-            android:visibility="invisible">
+            android:visibility="visible">
+
+            <!--  Categoria Label -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+
+                <EditText
+                    android:id="@+id/txtCategoriaPic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Categoria"
+                    android:inputType="textCapWords"
+                    android:textColor="#ffff" />
+            </android.support.design.widget.TextInputLayout>
 
             <!--  Nombre Label -->
             <android.support.design.widget.TextInputLayout
@@ -80,21 +96,7 @@
                     android:textColor="#ffff" />
             </android.support.design.widget.TextInputLayout>
 
-            <!--  Categoria Label -->
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="8dp">
 
-                <EditText
-                    android:id="@+id/txtCategoriaPic"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Categoria"
-                    android:inputType="textCapWords"
-                    android:textColor="#ffff" />
-            </android.support.design.widget.TextInputLayout>
 
             <!--  Respuesta Label -->
             <android.support.design.widget.TextInputLayout
