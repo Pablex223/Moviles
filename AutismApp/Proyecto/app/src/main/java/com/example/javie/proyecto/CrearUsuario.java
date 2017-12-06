@@ -137,15 +137,19 @@ public class CrearUsuario extends Fragment {
                 JSONObject jo = new JSONObject();
                 jo.put("usuario", txtUsuario.getText());
                 jo.put("nombre", txtNombre.getText());
-                jo.put("primerApellido", txtApellido.getText());
-                jo.put("segundoApellido", txtApellido2.getText());
-                jo.put("edad", txtEdad.getText());
-                jo.put("correo", txtEmail.getText());
+                jo.put("pa", txtApellido.getText());
+                jo.put("sa", txtApellido2.getText());
+                jo.put("edad", Integer.valueOf(txtEdad.getText().toString()));
                 jo.put("cont", txtContrasena.getText());
+                jo.put("correo", txtEmail.getText());
+
 
 
                 JSONObject jo1 = new JSONObject();
-                jo1.put("action", "nuevoUsuario");
+                if(Modificar_Flag == 1 )
+                    jo1.put("action", "editarUsuario");
+                else
+                    jo1.put("action", "nuevoUsuario");
                 jo1.put("data", jo);
 
                 Log.i("JSON", jo1.toString());
@@ -166,11 +170,12 @@ public class CrearUsuario extends Fragment {
                 }
                 String resultado;
                 JSONObject respuesta = new JSONObject(buffer.toString());
+                Log.i("RESPONSE", String.valueOf(buffer.toString()));
                 if(respuesta.getBoolean("success"))
                     resultado = "true";
                 else resultado = "false";
 
-                Log.i("RESPONSE", String.valueOf(buffer.toString()));
+
                 Log.i("STATUS", String.valueOf(conn.getResponseCode()));
                 Log.i("MSG" , conn.getResponseMessage());
 
@@ -189,7 +194,9 @@ public class CrearUsuario extends Fragment {
         protected void onPostExecute(String result){
             super.onPostExecute(result);
             if(result.equalsIgnoreCase("true")){
-                Toast.makeText(getActivity(), "Se ingreso el usuario efectivamente",Toast.LENGTH_SHORT).show();
+                if(Modificar_Flag ==1 )
+                    Toast.makeText(getActivity(), "Se modfico el usuario efectivamente",Toast.LENGTH_SHORT).show();
+                else Toast.makeText(getActivity(), "Se ingreso el usuario efectivamente",Toast.LENGTH_SHORT).show();
             }
             else
                 Toast.makeText(getActivity(), "Usuario no ingresado",Toast.LENGTH_SHORT).show();
