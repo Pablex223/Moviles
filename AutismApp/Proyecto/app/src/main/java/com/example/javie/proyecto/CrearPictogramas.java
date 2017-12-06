@@ -1,5 +1,6 @@
 package com.example.javie.proyecto;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -8,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.FileProvider;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +26,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.javie.proyecto.AccesoDatos.DatabaseHelper;
+import com.example.javie.proyecto.AccesoDatos.DbBitmapUtility;
 import com.example.javie.proyecto.Entidades.Pictograma;
 
 import java.io.File;
@@ -44,14 +50,16 @@ import static android.graphics.BitmapFactory.decodeFile;
  */
 
 public class CrearPictogramas extends Fragment {
-
+    //DatabaseHelper myDb;
     Button btnFoto, btnGuardarPic, btnGaleria;
     LinearLayout camposDatos;
+    TextView txtNombrePic, txtCategoriaPic,txtRespuestaPic;
     ImageView imgFoto;
     private Uri mImageCaptureUri;
     static final int CAM_REQUEST = 1;
     static final int GALLERY_REQUEST = 2;
     String mCurrentPhotoPath;
+    String uriString;
     public CrearPictogramas() {
         // Required empty public constructor
     }
@@ -61,10 +69,15 @@ public class CrearPictogramas extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_crear_pictograma, container, false);
+       // myDb = new DatabaseHelper(getContext());
         imgFoto = (ImageView) view.findViewById(R.id.imgFoto);
         btnFoto = (Button) view.findViewById(R.id.btnFoto);
         btnGaleria = (Button) view.findViewById(R.id.btnGaleria);
         btnGuardarPic = (Button) view.findViewById(R.id.btnGuardarPic);
+        txtNombrePic = (TextView) view.findViewById(R.id.txtNombrePic);
+        txtCategoriaPic = (TextView) view.findViewById(R.id.txtCategoriaPic);
+        txtRespuestaPic = (TextView) view.findViewById(R.id.txtRespuestaPic);
+
         camposDatos = (LinearLayout) view.findViewById(R.id.layoutDatosPictograma);
         btnFoto.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -104,32 +117,45 @@ public class CrearPictogramas extends Fragment {
             @Override
             public void onClick(View v){
                 Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-
-
-
                 // where do we want to find the data?
-
                 File pictureDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
                 String pictureDirectoryPath = pictureDirectory.getPath();
-
                 // finally, get a URI representation
-
                 Uri data = Uri.parse(pictureDirectoryPath);
 
-
-
                 // set the data and type.  Get all image types.
-
                 photoPickerIntent.setDataAndType(data, "image/*");
 
-
-
                 // we will invoke this activity, and get something back from it.
-
                 startActivityForResult(photoPickerIntent, GALLERY_REQUEST);
+
             }
         });
+
+
+        btnGuardarPic.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MainActivity myActivity = (MainActivity) getActivity();
+                        if(verificarPictograma()) {
+                            Bitmap bitmap = ((BitmapDrawable)imgFoto.getDrawable()).getBitmap();
+                            boolean isInserted = myActivity.insertar(
+                                    "Prueba14",
+                                    DbBitmapUtility.getBytes(bitmap),
+                                    "Emocional",
+                                    "123");
+                            //Toast.makeText(getActivity(),uriString,Toast.LENGTH_LONG).show();
+                            if (isInserted == true) {
+                                Toast.makeText(getActivity(), "Pictograma guardado", Toast.LENGTH_SHORT).show();
+                            }
+                            else
+                                Toast.makeText(getActivity(), "Pictograma no se pudo guardar", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }
+        );
+
         return view;
 
     }
@@ -183,68 +209,49 @@ public class CrearPictogramas extends Fragment {
             imgFoto.setImageBitmap(imageBitmap);
             habilitarCamposDatos();
         }
-        else
-            if(requestCode == GALLERY_REQUEST && resultCode == RESULT_OK){
-//                String path = getPathFromCameraData(data, this.getActivity());
-//                Log.i("PICTURE", "Path: " + path);
-//                if (path != null) {
-//                    imgFoto.setImageBitmap(BitmapFactory.decodeFile(path));
-//                    //setFullImageFromFilePath(imgFoto, path);
-//                }
-                // if we are here, we are hearing back from the image gallery.
+        else if (requestCode == GALLERY_REQUEST && resultCode == RESULT_OK) {
+            // the address of the image on the SD Card.
+            Uri imageUri = data.getData();
+            // declare a stream to read the image data from the SD Card.
+            InputStream inputStream;
+            // we are getting an input stream, based on the URI of the image.
+            try {
+                inputStream = getActivity().getContentResolver().openInputStream(imageUri);
+                // get a bitmap from the stream.
+                Bitmap image = BitmapFactory.decodeStream(inputStream);
+                // show the image to the user
+                uriString = imageUri.toString();
+                imgFoto.setImageBitmap(image);
+                habilitarCamposDatos();
+                Toast.makeText(getActivity(), "Foto agregada", Toast.LENGTH_SHORT).show();
 
+            } catch (FileNotFoundException e) {
 
-
-                // the address of the image on the SD Card.
-
-                Uri imageUri = data.getData();
-
-
-
-                // declare a stream to read the image data from the SD Card.
-
-                InputStream inputStream;
-
-
-
-                // we are getting an input stream, based on the URI of the image.
-
-                try {
-
-                    inputStream = getActivity().getContentResolver().openInputStream(imageUri);
-
-
-
-                    // get a bitmap from the stream.
-
-                    Bitmap image = BitmapFactory.decodeStream(inputStream);
-
-
-
-
-
-                    // show the image to the user
-
-                    imgFoto.setImageBitmap(image);
-                    habilitarCamposDatos();
-                    Toast.makeText(getActivity(), "Foto agregada",Toast.LENGTH_SHORT).show();
-
-                } catch (FileNotFoundException e) {
-
-                    e.printStackTrace();
-
-                    // show a message to the user indictating that the image is unavailable.
-                    Toast.makeText(getActivity(), "No se pudo subir la foto",Toast.LENGTH_SHORT).show();
-
-                }
-
-
-
+                e.printStackTrace();
+                // show a message to the user indictating that the image is unavailable.
+                Toast.makeText(getActivity(), "No se pudo subir la foto", Toast.LENGTH_SHORT).show();
             }
+        }
     }
 
     private void habilitarCamposDatos(){
         camposDatos.setVisibility(View.VISIBLE);
         btnGuardarPic.setEnabled(true);
     }
+
+
+    private boolean verificarPictograma(){
+        String categoria = txtCategoriaPic.getText().toString();
+        String respuesta = txtRespuestaPic.getText().toString();
+        if(TextUtils.isEmpty(categoria)) {
+            txtCategoriaPic.setError("Ingrese una categoria!");
+            return false;
+        }
+        else if(TextUtils.isEmpty(respuesta)) {
+            txtRespuestaPic.setError("Ingrese una respuesta!");
+            return false;
+        }
+        else return true;
+    }
+
 }

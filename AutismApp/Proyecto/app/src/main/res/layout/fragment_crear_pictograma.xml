@@ -63,6 +63,23 @@
             android:paddingLeft="24dp"
             android:paddingRight="24dp"
             android:visibility="invisible">
+
+            <!--  Nombre Label -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp">
+
+                <EditText
+                    android:id="@+id/txtNombrePic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre del Pictograma"
+                    android:inputType="textCapWords"
+                    android:textColor="#ffff" />
+            </android.support.design.widget.TextInputLayout>
+
             <!--  Categoria Label -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
@@ -79,7 +96,7 @@
                     android:textColor="#ffff" />
             </android.support.design.widget.TextInputLayout>
 
-            <!--  Categoria Label -->
+            <!--  Respuesta Label -->
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -91,7 +108,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Respuesta"
-                    android:enabled="false"
                     android:inputType="textCapWords"
                     android:textColor="#ffff" />
             </android.support.design.widget.TextInputLayout>
@@ -99,6 +115,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Guardar"
+                android:textColor="#ffff"
+                android:textStyle="bold"
+                android:background="@drawable/round_button"
                 android:id="@+id/btnGuardarPic"
                 android:layout_gravity="center_horizontal"/>
            </LinearLayout>
