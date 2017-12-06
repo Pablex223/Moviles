@@ -91,7 +91,7 @@ public class IngresarUsuario extends Fragment {
             public void onClick(View v){
                   //new JSONTask().execute("https://jsonparsingdemo-cec5b.firebaseapp.com/jsonData/moviesDemoItem.txt", "0");
                 if(verificarUsuario())
-                    new JSONTask().execute("http://192.168.1.107:8080/AutServlet/as");
+                    new JSONTask().execute("http://172.17.28.235:8080/AutServlet/as");
                else
                     Toast.makeText(getActivity(), "Por favor, complete los campos",Toast.LENGTH_SHORT).show();
 

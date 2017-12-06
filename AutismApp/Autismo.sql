@@ -107,3 +107,8 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+select * from Persona;
+insert into Analisis values (0, 1,2,3);
+insert into Persona values
+ ("Avc", "Pedro","Ramirez", "qe", 23, "asda", "ada", "afa", 0); 

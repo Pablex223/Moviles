@@ -33,6 +33,7 @@ public class IniciarPictogramas extends Fragment {
 
     MainActivity activity;
     Button btnRespuest1,btnRespuest2,btnRespuest3,btnRespuest4,btnResponder,btnReinciar,btnRespuestaFinal = null;
+    TextView txtRespuestasCorrectas;
     ImageView imgPictograma, mic1,mic2,mic3,mic4;
     List<Pictograma> listaPictogramas;
     List<Button> listaBotonesRespuestas;
@@ -49,6 +50,7 @@ public class IniciarPictogramas extends Fragment {
         activity = (MainActivity) getActivity();
 
         contador = 0;
+        txtRespuestasCorrectas = (TextView) view.findViewById(R.id.txtRespuestasCorrectas);
         btnRespuest1 = (Button) view.findViewById(R.id.btnRespuesta1);
         btnRespuest2 = (Button) view.findViewById(R.id.btnRespuesta2);
         btnRespuest3 = (Button) view.findViewById(R.id.btnRespuesta3);
@@ -62,7 +64,6 @@ public class IniciarPictogramas extends Fragment {
         mic3 = (ImageView) view.findViewById(R.id.mic3);
         mic4 = (ImageView) view.findViewById(R.id.mic4);
 
-        imgPictograma = (ImageView) view.findViewById(R.id.imgPictograma);
 
         btnRespuest1.setOnClickListener(marcarRespuesta);
         btnRespuest2.setOnClickListener(marcarRespuesta);
@@ -75,7 +76,7 @@ public class IniciarPictogramas extends Fragment {
         mic4.setOnClickListener(escucharRespuesta);
 
         btnResponder.setOnClickListener(responder);
-
+        imgPictograma = (ImageView) view.findViewById(R.id.imgPictograma);
         reiniciarListaBotones();
         inicializarPictogramas();
         return view;
@@ -117,7 +118,7 @@ public class IniciarPictogramas extends Fragment {
             b.setPaintFlags(b.getPaintFlags() |  Paint.UNDERLINE_TEXT_FLAG);
             desmarcarRespuesta(b);
             btnRespuestaFinal = b;
-            Toast.makeText(getActivity(), respuesta, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), respuesta, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -154,10 +155,19 @@ public class IniciarPictogramas extends Fragment {
         @Override
         public void onClick(final View v) {
             if(btnRespuestaFinal != null){
-                //Revisar si la respuesta es correcta
+                Pictograma actual;
+                actual = listaPictogramas.get(contador);
+                String res = btnRespuestaFinal.getText().toString();
+                if(res.equalsIgnoreCase(actual.getRespuesta())){
+                    aumentarRespuestasCorrectas();
+                    Toast.makeText(getActivity(), "¡Respuesta Correcta!", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(getActivity(), "¡Respuesta Incorrecta!", Toast.LENGTH_SHORT).show();
+                }
                 //Aumentarla en el marcador
                 if(++contador < listaPictogramas.size()){
-                    Pictograma actual = listaPictogramas.get(contador);
+                    actual = listaPictogramas.get(contador);
                     imgPictograma.setImageBitmap(actual.getImagen());
                     Button respuestaCorrecta = botonRandom();
                     respuestaCorrecta.setText(actual.getRespuesta());
@@ -228,6 +238,12 @@ public class IniciarPictogramas extends Fragment {
         botonRandom().setText(listaAlternativas.get(0));
         botonRandom().setText(listaAlternativas.get(1));
         botonRandom().setText(listaAlternativas.get(2));
+    }
+
+    private void aumentarRespuestasCorrectas(){
+      int act = Integer.valueOf(txtRespuestasCorrectas.getText().toString());
+      act++;
+      txtRespuestasCorrectas.setText(String.valueOf(act));
     }
 
 }

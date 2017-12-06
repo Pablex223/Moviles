@@ -135,12 +135,21 @@ public class CrearPictogramas extends Fragment {
                     public void onClick(View v) {
                         MainActivity myActivity = (MainActivity) getActivity();
                         if(verificarPictograma()) {
+                            String nombre = txtNombrePic.getText().toString();
+                            String categoria = String.valueOf(spinnerCategoria.getSelectedItem()).toString();
+                            String respuesta = txtRespuestaPic.getText().toString();
                             Bitmap bitmap = ((BitmapDrawable)imgFoto.getDrawable()).getBitmap();
+//                            boolean isInserted = myActivity.insertar(
+//                                    "Prueba12",
+//                                    DbBitmapUtility.getBytes(bitmap),
+//                                    "Emocional",
+//                                    "123");
+
                             boolean isInserted = myActivity.insertar(
-                                    "Prueba14",
+                                    nombre,
                                     DbBitmapUtility.getBytes(bitmap),
-                                    "Emocional",
-                                    "123");
+                                    categoria,
+                                    respuesta);
                             //Toast.makeText(getActivity(),uriString,Toast.LENGTH_LONG).show();
                             if (isInserted == true) {
                                 Toast.makeText(getActivity(), "Pictograma guardado", Toast.LENGTH_SHORT).show();

@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity
             public void onInit(int status) {
                 if(status != TextToSpeech.ERROR) {
                     Locale locSpanish = new Locale("spa", "MEX");
-                    t1.setLanguage(locSpanish);
-                   // t1.setLanguage(Locale.US);
+                    //t1.setLanguage(locSpanish);
+                    t1.setLanguage(Locale.US);
                 }
             }
         });
@@ -172,7 +172,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void speak(String text) {
-        Toast.makeText(this, text,Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, text,Toast.LENGTH_SHORT).show();
         t1.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 

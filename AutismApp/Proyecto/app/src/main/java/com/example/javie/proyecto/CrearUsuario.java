@@ -1,7 +1,9 @@
 package com.example.javie.proyecto;
 
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -79,7 +81,7 @@ public class CrearUsuario extends Fragment {
             @Override
             public void onClick(View v){
                 if(verificarUsuario())
-                    new JSONCrearUsuario().execute("http://192.168.1.107:8080/AutServlet/as");
+                    new JSONCrearUsuario().execute("http://172.17.28.235:8080/AutServlet/as");
                 else
                     Toast.makeText(getActivity(), "Por favor, complete los campos",Toast.LENGTH_SHORT).show();
 
@@ -196,7 +198,32 @@ public class CrearUsuario extends Fragment {
             if(result.equalsIgnoreCase("true")){
                 if(Modificar_Flag ==1 )
                     Toast.makeText(getActivity(), "Se modfico el usuario efectivamente",Toast.LENGTH_SHORT).show();
-                else Toast.makeText(getActivity(), "Se ingreso el usuario efectivamente",Toast.LENGTH_SHORT).show();
+                else {
+                    Toast.makeText(getActivity(), "Se ingreso el usuario efectivamente",Toast.LENGTH_SHORT).show();
+                    DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            switch (which){
+                                case DialogInterface.BUTTON_POSITIVE:{
+                                    FragmentManager manager = getActivity().getSupportFragmentManager();
+                                    Formulario formulario = new Formulario();
+                                    manager.beginTransaction().replace(R.id.contenedor,
+                                            formulario,
+                                            formulario.getTag()).commit();
+                                }
+                                break;
+
+                                case DialogInterface.BUTTON_NEGATIVE:
+                                    //No button clicked
+                                    break;
+                            }
+                        }
+                    };
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setMessage("¿Desea realizar un análisis conductual?").setPositiveButton("Si", dialogClickListener)
+                            .setNegativeButton("No", dialogClickListener).show();
+                }
             }
             else
                 Toast.makeText(getActivity(), "Usuario no ingresado",Toast.LENGTH_SHORT).show();

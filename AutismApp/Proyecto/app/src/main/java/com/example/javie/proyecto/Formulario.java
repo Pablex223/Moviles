@@ -1,14 +1,27 @@
 package com.example.javie.proyecto;
 
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.Toast;
+
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 
 /**
@@ -28,8 +41,14 @@ public class Formulario extends Fragment {
     RadioButton SiPregunta10, NoPregunta10;
     RadioButton SiPregunta11, NoPregunta11;
     RadioButton SiPregunta12, NoPregunta12;
-
+    private int puntajeTotal, puntajeAreaSocial, puntajeAreaLinguistica, puntajeAreaConductas;
     Button btnSubmitFormulario;
+    String emailUsuario;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String CONTRASENA = "contrasenaKey";
+    public static final String EMAIL = "emailKey";
+    SharedPreferences sharedpreferences;
+
     public Formulario() {
         // Required empty public constructor
     }
@@ -64,6 +83,7 @@ public class Formulario extends Fragment {
         NoPregunta11 = (RadioButton) view.findViewById(R.id.NoPregunta11);
         SiPregunta12 = (RadioButton) view.findViewById(R.id.SiPregunta12);
         NoPregunta12 = (RadioButton) view.findViewById(R.id.NoPregunta12);
+        sharedpreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
 
 
 
@@ -117,13 +137,93 @@ public class Formulario extends Fragment {
     private View.OnClickListener enviarFormulario = new View.OnClickListener() {
         @Override
         public void onClick(final View v) {
-            int puntajeTotal = puntajePorCategoria(SiPregunta1, SiPregunta2, SiPregunta3, SiPregunta4) +
-                    puntajePorCategoria(SiPregunta5, SiPregunta6, SiPregunta7, SiPregunta8) +
-                    puntajePorCategoria(SiPregunta9, SiPregunta10, SiPregunta11, SiPregunta12);
+            puntajeAreaSocial = puntajePorCategoria(SiPregunta1, SiPregunta2, SiPregunta3, SiPregunta4);
+            puntajeAreaLinguistica = puntajePorCategoria(SiPregunta5, SiPregunta6, SiPregunta7, SiPregunta8);
+            puntajeAreaConductas = puntajePorCategoria(SiPregunta9, SiPregunta10, SiPregunta11, SiPregunta12);
+            puntajeTotal = puntajeAreaSocial + puntajeAreaLinguistica + puntajeAreaConductas;
             String p = "Puntaje total: " + puntajeTotal;
+            emailUsuario = sharedpreferences.getString(EMAIL, null);
+            if(emailUsuario != null) {
+
+            }
             Toast.makeText(getActivity(), p, Toast.LENGTH_SHORT).show();
         }
     };
 
+    public class JSONFormulario extends AsyncTask<String, String, String> {
 
+        @Override
+        protected String doInBackground(String... params) {
+            HttpURLConnection conn = null;
+            BufferedReader reader = null;
+            try{
+                URL url = new URL(params[0]);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                conn.setRequestProperty("Accept","application/json");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+
+
+                JSONObject jo = new JSONObject();
+                jo.put("as", Integer.valueOf(puntajeAreaSocial));
+                jo.put("al", Integer.valueOf(puntajeAreaLinguistica));
+                jo.put("ac", Integer.valueOf(puntajeAreaConductas));
+                jo.put("usuario", emailUsuario);
+
+
+
+                JSONObject jo1 = new JSONObject();
+                jo1.put("action", "nuevoUsuario");
+                jo1.put("data", jo);
+
+                Log.i("JSON", jo1.toString());
+                DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+                os.writeBytes(jo1.toString());
+
+                os.flush();
+                os.close();
+                InputStream stream = conn.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                StringBuffer buffer = new StringBuffer();
+
+
+                String line = "";
+                while((line = reader.readLine())!= null){
+                    buffer.append(line);
+                }
+                String resultado;
+                JSONObject respuesta = new JSONObject(buffer.toString());
+                Log.i("RESPONSE", String.valueOf(buffer.toString()));
+                if(respuesta.getBoolean("success"))
+                    resultado = "true";
+                else resultado = "false";
+
+
+                Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                Log.i("MSG" , conn.getResponseMessage());
+
+
+
+                conn.disconnect();
+
+                return resultado;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return  null;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            super.onPostExecute(result);
+            if(result.equalsIgnoreCase("true")){
+               Toast.makeText(getActivity(), "Se ingreso el analisis efectivamente",Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(getActivity(), "Analisis no ingresado",Toast.LENGTH_SHORT).show();
+        }
+    }
 }
