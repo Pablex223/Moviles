@@ -26,6 +26,7 @@ public class CrearUsuario extends Fragment {
     Button btnCrearCuenta;
     EditText txtNombre, txtEmail, txtContrasena;
     TextView linkLogin;
+    private int Modificar_Flag = 0 ;
 
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String CONTRASENA = "contrasenaKey";
@@ -71,7 +72,7 @@ public class CrearUsuario extends Fragment {
 
             }
         });
-
+        llenarCamposCuentaModificar();
         return view;
     }
 
@@ -92,6 +93,16 @@ public class CrearUsuario extends Fragment {
             return false;
         }
         else return true;
+    }
+
+    private void llenarCamposCuentaModificar(){
+        //Agregar los demas campos...
+        String emailUsuario = sharedpreferences.getString(EMAIL, null);
+        if(emailUsuario != null) {
+            txtEmail.setText(emailUsuario);
+            btnCrearCuenta.setText("GUARDAR CAMBIOS");
+            Modificar_Flag = 1;
+        }
     }
 
 

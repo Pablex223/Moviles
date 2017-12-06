@@ -22,7 +22,7 @@ import android.widget.Toast;
 public class Inicio extends Fragment {
 
     TextView txtBienvenido;
-    Button btnSalir;
+    Button btnSalir, btnEditarCuenta;
     String emailUsuario = "";
     ProgressBar progressBar;
 
@@ -42,6 +42,7 @@ public class Inicio extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_inicio, container, false);
         txtBienvenido = (TextView) view.findViewById(R.id.txtBienvenido);
         btnSalir = (Button) view.findViewById(R.id.btnSalir);
+        btnEditarCuenta = (Button) view.findViewById(R.id.btnEditarCuenta);
         progressBar = (ProgressBar) view.findViewById(R.id.progressbar);
 
         sharedpreferences = getActivity().getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
@@ -76,6 +77,16 @@ public class Inicio extends Fragment {
                 };
                 handler.postDelayed(runnable, 3000);
 
+            }
+        });
+        btnEditarCuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                CrearUsuario crearUsuario = new CrearUsuario();
+                manager.beginTransaction().replace(R.id.contenedor,
+                        crearUsuario,
+                        crearUsuario.getTag()).commit();
             }
         });
         return view;

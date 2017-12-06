@@ -3,10 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.javie.proyecto.CrearPictogramas"
+    tools:context="com.example.javie.proyecto.IniciarPictogramas"
     android:id="@+id/fragment_pictograma"
     android:background="@drawable/backgroud">
 
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fitsSystemWindows="true">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,7 +19,7 @@
         <TableLayout
             android:layout_marginLeft="50dp"
             android:layout_marginRight="50dp"
-            android:layout_marginTop="7dp"
+            android:layout_marginTop="18dp"
             android:layout_width="match_parent"
             android:layout_height="20dp"
            >
@@ -52,46 +57,128 @@
             android:textColor="#ffff"
             android:textStyle="bold"/>
         <TableLayout
-            android:layout_marginLeft="45dp"
-            android:layout_marginRight="45dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginRight="25dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:stretchColumns="*">
             <TableRow>
-                <Button
-                    android:layout_margin="5dp"
-                    android:id="@+id/btnRespuesta1"
-                    android:textColor="#ffff"
-                    android:textStyle="bold"
-                    android:background="@color/colorPrimary"
-                    android:text="respuesta 1"/>
-                <Button
-                    android:layout_margin="5dp"
-                    android:id="@+id/btnRespuesta2"
-                    android:textColor="#ffff"
-                    android:textStyle="bold"
-                    android:background="@color/colorAccent"
-                    android:text="respuesta 2"/>
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:elevation="20dp"
+                        android:src="@drawable/mic"
+                        android:id="@+id/mic1"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"/>
+                    <Button
+                        android:layout_height="match_parent"
+                        android:layout_width="130dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/btnRespuesta1"
+                        android:textColor="#ffff"
+                        android:textStyle="bold"
+                        android:background="@color/colorPrimary"
+                        android:text="respuesta 1"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal">
+                    <Button
+                        android:layout_height="match_parent"
+                        android:layout_width="130dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginBottom="5dp"
+                        android:id="@+id/btnRespuesta2"
+                        android:textColor="#ffff"
+                        android:textStyle="bold"
+                        android:background="@color/colorAccent"
+                        android:text="respuesta 2"/>
+                    <ImageView
+                        android:elevation="20dp"
+                        android:src="@drawable/mic"
+                        android:id="@+id/mic2"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
             </TableRow>
             <TableRow>
-                <Button
-                    android:layout_margin="5dp"
-                    android:id="@+id/btnRespuesta3"
-                    android:textColor="#ffff"
-                    android:textStyle="bold"
-                    android:background="#fff000"
-                    android:text="respuesta 3"/>
-                <Button
-                    android:layout_margin="5dp"
-                    android:id="@+id/btnRespuesta4"
-                    android:textColor="#ffff"
-                    android:textStyle="bold"
-                    android:background="#33cc33"
-                    android:text="respuesta 4"/>
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:elevation="20dp"
+                        android:src="@drawable/mic"
+                        android:id="@+id/mic3"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"/>
+                    <Button
+                        android:layout_height="match_parent"
+                        android:layout_width="130dp"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="5dp"
+                        android:id="@+id/btnRespuesta3"
+                        android:textColor="#ffff"
+                        android:textStyle="bold"
+                        android:background="#fff000"
+                        android:text="respuesta 3"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="100dp"
+                    android:layout_height="60dp"
+                    android:orientation="horizontal">
+                    <Button
+                        android:layout_height="match_parent"
+                        android:layout_width="130dp"
+                        android:layout_marginLeft="12dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginRight="5dp"
+                        android:id="@+id/btnRespuesta4"
+                        android:textColor="#ffff"
+                        android:textStyle="bold"
+                        android:background="#33cc33"
+                        android:text="respuesta 4"/>
+                    <ImageView
+                        android:elevation="20dp"
+                        android:src="@drawable/mic"
+                        android:id="@+id/mic4"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
             </TableRow>
         </TableLayout>
 
+        <Button
+            android:id="@+id/btnResponder"
+            android:layout_margin="10dp"
+            android:background="@drawable/round_button"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:text="Responder"
+            android:textColor="#ffff"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"/>
+
+        <Button
+            android:id="@+id/btnReinciar"
+            android:layout_margin="5dp"
+            android:background="@drawable/reiniciar"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:textColor="#ffff"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"/>
     </LinearLayout>
 
-
+    </ScrollView>
 </FrameLayout>

@@ -1,8 +1,16 @@
 package com.example.javie.proyecto;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -14,8 +22,24 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.javie.proyecto.AccesoDatos.DatabaseHelper;
+import com.example.javie.proyecto.AccesoDatos.DbBitmapUtility;
+import com.example.javie.proyecto.Entidades.Categoria;
+import com.example.javie.proyecto.Entidades.Pictograma;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    TextToSpeech t1;
+    DatabaseHelper myDb;
+    public static final String MyPREFERENCES = "MyPrefs" ;
+    public static final String CONTRASENA = "contrasenaKey";
+    public static final String EMAIL = "emailKey";
+    String emailUsuario = "";
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +48,18 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        myDb = new DatabaseHelper(this);
+        t1=new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != TextToSpeech.ERROR) {
+                    Locale locSpanish = new Locale("spa", "MEX");
+                    t1.setLanguage(locSpanish);
+                    //t1.setLanguage(Locale.US);
+                }
+            }
+        });
+        sharedpreferences = this.getSharedPreferences(MyPREFERENCES, Context.MODE_PRIVATE);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,32 +123,115 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         FragmentManager manager = getSupportFragmentManager();
         int id = item.getItemId();
-
         if (id == R.id.nav_camera) {
-            IngresarUsuario ingresarUsuario = new IngresarUsuario();
-            manager.beginTransaction().replace(R.id.contenedor,
-                    ingresarUsuario,
-                    ingresarUsuario.getTag()).commit();
+            emailUsuario = sharedpreferences.getString(EMAIL, null);
+            if(emailUsuario != null) {
+                Inicio inicio = new Inicio();
+                manager.beginTransaction().replace(R.id.contenedor,
+                        inicio,
+                        inicio.getTag()).commit();
+            } else {
+                IngresarUsuario ingresarUsuario = new IngresarUsuario();
+                manager.beginTransaction().replace(R.id.contenedor,
+                        ingresarUsuario,
+                        ingresarUsuario.getTag()).commit();
+            }
         } else if (id == R.id.nav_gallery) {
-            CrearPictogramas pictogramas = new CrearPictogramas();
+            OpcionesPictogramas opcionesPictogramas = new OpcionesPictogramas();
             manager.beginTransaction().replace(R.id.contenedor,
-                    pictogramas,
-                    pictogramas.getTag()).commit();
+                    opcionesPictogramas,
+                    opcionesPictogramas.getTag()).commit();
         } else if (id == R.id.nav_slideshow) {
 
         } else if (id == R.id.nav_manage) {
 
         } else if (id == R.id.nav_share) {
+            Formulario formulario = new Formulario();
+            manager.beginTransaction().replace(R.id.contenedor,
+                    formulario,
+                    formulario.getTag()).commit();
+        } else if (id == R.id.nav_send) {
             AcercaDe acercaDe = new AcercaDe();
             manager.beginTransaction().replace(R.id.contenedor,
                     acercaDe,
                     acercaDe.getTag()).commit();
-        } else if (id == R.id.nav_send) {
-
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void speak(String text) {
+        t1.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+   //BD
+    public boolean insertar(String nombre,  byte[] image, String categoria, String respuesta){
+        return myDb.insertData(nombre, image, categoria, respuesta);
+    }
+
+    public Bitmap getBitmapImage(String nombre){
+
+        Cursor res = myDb.getPictogramaPorNombre(nombre);
+        Bitmap b = null;
+        if(res.getCount() == 0) {
+            // show message
+            showMessage("Error","Nothing found");
+        }
+
+        while (res.moveToNext()) {
+            byte[] image = res.getBlob(2);
+            b = DbBitmapUtility.getImage(image);
+        }
+        return b;
+    }
+
+    public  List<Pictograma> getPictogramasPorCategoria(String categoria){
+        List<Pictograma> listaPictogramas;
+        listaPictogramas = new ArrayList<Pictograma>();
+        Cursor res = myDb.getPictogramaPorCategoria(categoria);
+        Bitmap b = null;
+        if(res.getCount() == 0) {
+            // show message
+            showMessage("Error","Nothing found");
+        }
+        while (res.moveToNext()) {
+            int id = res.getInt(0);
+            String nombre = res.getString(1);
+            byte[] image = res.getBlob(2);
+            b = DbBitmapUtility.getImage(image);
+            String cate = res.getString(3);
+            String respuesta = res.getString(4);
+            Pictograma nuevo = new Pictograma(id,nombre,b,new Categoria(cate), respuesta);
+            listaPictogramas.add(nuevo);
+        }
+        return listaPictogramas;
+    }
+
+    public void onPause(){
+        if(t1 !=null){
+            t1.stop();
+            t1.shutdown();
+        }
+        super.onPause();
+    }
+
+    public void showMessage(String title, String Message) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setCancelable(true);
+        builder.setTitle(title);
+        builder.setMessage(Message);
+        builder.show();
+    }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        for (Fragment fragment : getSupportFragmentManager().getFragments()) {
+//            fragment.onActivityResult(requestCode, resultCode, data);
+//        }
+//    }
+
 }

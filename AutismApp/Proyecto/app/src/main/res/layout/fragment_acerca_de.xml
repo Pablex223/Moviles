@@ -5,21 +5,52 @@
     tools:context="com.example.javie.proyecto.AcercaDe"
     android:id="@+id/fragement_acerca_de"
     android:background="@drawable/backgroud">
-
-    <!-- TODO: Update blank fragment layout -->
+    <ScrollView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:fitsSystemWindows="true">
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
         <TextView
-            android:layout_width="200dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:text="Aplicación 2017"
+            android:text="Universidad Nacional de Costa Rica 2017"
             android:layout_gravity="center_horizontal"
             android:textColor="#ffff"/>
+        <TextView
+            android:layout_margin="10dp"
+            android:textColor="#ffff"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical|right"
+            android:text="Gracias a la tecnología la vida de los seres humanos se simplifica de gran manera, de este modo existe una gran dependencia hacia ella, en la actualidad la utilizamos para nuestros trabajos, activadas de recreación, transporte, educación entre otros.
+Una de las principales herramientas utilizadas por las personas en todas las áreas mencionadas son los teléfonos móviles, en el cual tiene amplias funcionalidades, radio, llamadas, cámara, grabadora, y con la creación e implementación de la Play Store, brindan a las personas muchas posibilidades para obtener aplicaciones que pueden cubrir las necesidades de cada una.
+La nuevas tecnologías puede ser un apoyo excelente para cualquier personas o sus cuidadores,  de este modo se planea crear una App en el cual la población establecida tenga una herramienta útil para su interacción, comunicación, aprendizaje, situaciones sociales, motora fina con la Visio motora entre otras más,  pero que a la vez su manejo sea sencillo, donde las personas vayan a interactuar y aprender de manera divertida, entre las principales característica que debe cumplir son:
+1. Que sea divertida
+2. Que fomenten el aprendizaje
+3. Que sean sencilla de usar
+4. Que este diseñada con flexibilidad pero dirigidas a única función.
+5. Que el interfaz sea claro y ordenado.
 
+Para el conocimiento de las necesidades que se tiene respecto a una aplicación dirigida a esta población, se investigó en la red para tener un conocimiento mínimo de esta discapacidad, a la vez se contó con la ayuda de personas como estudiantes de la Universidad Nacional de la carrera Educación Especial, al igual que observaciones participativas dentro del proceso de recreación accesible del Comité Cantonal Deportivo de Belén donde se presentan personas con diferentes discapacidades, entre estas con autismo, con el fin de recolectar diferentes fuentes de información y ver las necesidades que se pueden resolver por medio de una aplicación.
+"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Desarrolladores: Javier Zaldívar Coto"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="                 Luis"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="                 Pablo"/>
     </LinearLayout>
-
+    </ScrollView>
 </FrameLayout>
