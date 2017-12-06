@@ -126,7 +126,9 @@ public class Analisis implements Serializable {
     
     public static Analisis fromJson(JSONObject jo){
         Analisis a = new Analisis();
-      //  a.setAreaConductas(jo.getString("ac"));
+        a.setAreaConductas(jo.getInt("ac"));
+        a.setAreaLinguistica(jo.getInt("al"));
+        a.setAreaSocial(jo.getInt("as"));
         return a;
     }
 }

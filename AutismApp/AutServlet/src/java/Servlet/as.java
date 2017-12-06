@@ -10,6 +10,7 @@ import Modelo.Persona;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -18,6 +19,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jpa.AnalisisJpaController;
 import jpa.PersonaJpaController;
 import jpa.exceptions.PreexistingEntityException;
 import org.json.JSONException;
@@ -50,6 +52,7 @@ public class as extends HttpServlet {
                     case "login": loginAct(response, jo.getJSONObject("data")); break;
                     case "nuevoUsuario": nuevoUsuarioAct(response, jo.getJSONObject("data")) ;break;
                     case "editarUsuario": editarUsuarioAct(response, jo.getJSONObject("data")) ;break;
+                    case "nuevoAnalisis": nuevoAnalisisAct(response, jo.getJSONObject("data")) ;break;
                     default:  response.sendError(HttpServletResponse.SC_BAD_REQUEST, "The request sent by the client was syntactically incorrect.");
                 }
             }
@@ -99,20 +102,32 @@ public class as extends HttpServlet {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("AutServletPU");
             Persona p = Persona.fromJson(jsonObject);
             p.setCuentaCollection(new ArrayList<>());
-            try{
-                int aInt = jsonObject.getInt("analisis");
-                p.setAnalisisid(new Analisis(aInt));
-            }catch(Exception ex){           
-            }
             new PersonaJpaController(emf).edit(p);
             pw.write( new JSONObject().put("success", true).toString());
         }catch(Exception ex){
             pw.write( new JSONObject().put("success", false).toString());
         }
-            pw.flush();             
-        
+        pw.flush();  
     }
-    
+       
+    private void nuevoAnalisisAct(HttpServletResponse response, JSONObject jsonObject) throws IOException {
+        response.setContentType("application/json");
+        PrintWriter pw = response.getWriter();
+        try{
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("AutServletPU");
+            AnalisisJpaController ajc = new AnalisisJpaController(emf);
+            ajc.create(Analisis.fromJson(jsonObject));
+            List<Analisis> list = ajc.findAnalisisEntities();
+            PersonaJpaController pjc = new PersonaJpaController(emf);
+            Persona p = pjc.findPersona(jsonObject.getString("usuario"));
+            p.setAnalisisid(list.get(list.size()-1));
+            pjc.edit(p);
+            pw.write( new JSONObject().put("success", true).toString());
+        }catch(Exception ex){
+            pw.write( new JSONObject().put("success", false).toString());
+        }
+            pw.flush();             
+    }
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

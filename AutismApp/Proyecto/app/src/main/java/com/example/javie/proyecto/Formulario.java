@@ -46,6 +46,7 @@ public class Formulario extends Fragment {
     String emailUsuario;
     public static final String MyPREFERENCES = "MyPrefs" ;
     public static final String CONTRASENA = "contrasenaKey";
+    public static final String FORMULARIO = "formularioKey";
     public static final String EMAIL = "emailKey";
     SharedPreferences sharedpreferences;
 
@@ -144,9 +145,9 @@ public class Formulario extends Fragment {
             String p = "Puntaje total: " + puntajeTotal;
             emailUsuario = sharedpreferences.getString(EMAIL, null);
             if(emailUsuario != null) {
-
+                new JSONFormulario().execute("http://172.17.28.235:8080/AutServlet/as");
             }
-            Toast.makeText(getActivity(), p, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), p, Toast.LENGTH_SHORT).show();
         }
     };
 
@@ -175,7 +176,7 @@ public class Formulario extends Fragment {
 
 
                 JSONObject jo1 = new JSONObject();
-                jo1.put("action", "nuevoUsuario");
+                jo1.put("action", "nuevoAnalisis");
                 jo1.put("data", jo);
 
                 Log.i("JSON", jo1.toString());
@@ -221,6 +222,10 @@ public class Formulario extends Fragment {
             super.onPostExecute(result);
             if(result.equalsIgnoreCase("true")){
                Toast.makeText(getActivity(), "Se ingreso el analisis efectivamente",Toast.LENGTH_SHORT).show();
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+
+                editor.putBoolean(FORMULARIO, true);
+                editor.commit();
             }
             else
                 Toast.makeText(getActivity(), "Analisis no ingresado",Toast.LENGTH_SHORT).show();

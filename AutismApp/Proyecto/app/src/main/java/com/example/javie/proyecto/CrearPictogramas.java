@@ -217,7 +217,7 @@ public class CrearPictogramas extends Fragment {
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == CAM_REQUEST && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
@@ -247,6 +247,7 @@ public class CrearPictogramas extends Fragment {
                 Toast.makeText(getActivity(), "No se pudo subir la foto", Toast.LENGTH_SHORT).show();
             }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void habilitarCamposDatos(){

@@ -88,10 +88,18 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         FragmentManager manager = getSupportFragmentManager();
 
-        IngresarUsuario ingresarUsuario = new IngresarUsuario();
-        manager.beginTransaction().replace(R.id.contenedor,
-                ingresarUsuario,
-                ingresarUsuario.getTag()).commit();
+        emailUsuario = sharedpreferences.getString(EMAIL, null);
+        if(emailUsuario != null) {
+            Inicio inicio = new Inicio();
+            manager.beginTransaction().replace(R.id.contenedor,
+                    inicio,
+                    inicio.getTag()).commit();
+        } else {
+            IngresarUsuario ingresarUsuario = new IngresarUsuario();
+            manager.beginTransaction().replace(R.id.contenedor,
+                    ingresarUsuario,
+                    ingresarUsuario.getTag()).commit();
+        }
     }
 
     @Override
@@ -173,7 +181,7 @@ public class MainActivity extends AppCompatActivity
 
     public void speak(String text) {
         //Toast.makeText(this, text,Toast.LENGTH_SHORT).show();
-        t1.speak(text, TextToSpeech.QUEUE_FLUSH, null);
+        t1.speak(text, TextToSpeech.QUEUE_ADD, null);
     }
 
    //BD
