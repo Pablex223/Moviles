@@ -53,10 +53,6 @@ public class Cuenta implements Serializable {
     }
 
     
-    
-    
-  
-    
     public Cuenta(Integer id) {
         this.id = id;
     }
@@ -112,7 +108,7 @@ public class Cuenta implements Serializable {
     }
     
     
-    
+    /*
     public org.json.JSONObject toJson(){
         return new org.json.JSONObject()
                 .put("id", this.id)
@@ -127,8 +123,9 @@ public class Cuenta implements Serializable {
                 Persona.fromJson(jo.getJSONObject("usuarioN"))
                 
             );  
+  
 }
-    
+    */  
     
     
 }
