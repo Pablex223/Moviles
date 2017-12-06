@@ -3,11 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package JPA;
+package jpa;
 
-import JPA.exceptions.IllegalOrphanException;
-import JPA.exceptions.NonexistentEntityException;
-import JPA.exceptions.PreexistingEntityException;
 import Modelo.Categoria;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -16,9 +13,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Modelo.Pictograma;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import jpa.exceptions.IllegalOrphanException;
+import jpa.exceptions.NonexistentEntityException;
+import jpa.exceptions.PreexistingEntityException;
 
 /**
  *
@@ -36,27 +37,27 @@ public class CategoriaJpaController implements Serializable {
     }
 
     public void create(Categoria categoria) throws PreexistingEntityException, Exception {
-        if (categoria.getPictogramaList() == null) {
-            categoria.setPictogramaList(new ArrayList<Pictograma>());
+        if (categoria.getPictogramaCollection() == null) {
+            categoria.setPictogramaCollection(new ArrayList<Pictograma>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Pictograma> attachedPictogramaList = new ArrayList<Pictograma>();
-            for (Pictograma pictogramaListPictogramaToAttach : categoria.getPictogramaList()) {
-                pictogramaListPictogramaToAttach = em.getReference(pictogramaListPictogramaToAttach.getClass(), pictogramaListPictogramaToAttach.getId());
-                attachedPictogramaList.add(pictogramaListPictogramaToAttach);
+            Collection<Pictograma> attachedPictogramaCollection = new ArrayList<Pictograma>();
+            for (Pictograma pictogramaCollectionPictogramaToAttach : categoria.getPictogramaCollection()) {
+                pictogramaCollectionPictogramaToAttach = em.getReference(pictogramaCollectionPictogramaToAttach.getClass(), pictogramaCollectionPictogramaToAttach.getId());
+                attachedPictogramaCollection.add(pictogramaCollectionPictogramaToAttach);
             }
-            categoria.setPictogramaList(attachedPictogramaList);
+            categoria.setPictogramaCollection(attachedPictogramaCollection);
             em.persist(categoria);
-            for (Pictograma pictogramaListPictograma : categoria.getPictogramaList()) {
-                Categoria oldCategoriaidOfPictogramaListPictograma = pictogramaListPictograma.getCategoriaid();
-                pictogramaListPictograma.setCategoriaid(categoria);
-                pictogramaListPictograma = em.merge(pictogramaListPictograma);
-                if (oldCategoriaidOfPictogramaListPictograma != null) {
-                    oldCategoriaidOfPictogramaListPictograma.getPictogramaList().remove(pictogramaListPictograma);
-                    oldCategoriaidOfPictogramaListPictograma = em.merge(oldCategoriaidOfPictogramaListPictograma);
+            for (Pictograma pictogramaCollectionPictograma : categoria.getPictogramaCollection()) {
+                Categoria oldCategoriaidOfPictogramaCollectionPictograma = pictogramaCollectionPictograma.getCategoriaid();
+                pictogramaCollectionPictograma.setCategoriaid(categoria);
+                pictogramaCollectionPictograma = em.merge(pictogramaCollectionPictograma);
+                if (oldCategoriaidOfPictogramaCollectionPictograma != null) {
+                    oldCategoriaidOfPictogramaCollectionPictograma.getPictogramaCollection().remove(pictogramaCollectionPictograma);
+                    oldCategoriaidOfPictogramaCollectionPictograma = em.merge(oldCategoriaidOfPictogramaCollectionPictograma);
                 }
             }
             em.getTransaction().commit();
@@ -78,36 +79,36 @@ public class CategoriaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Categoria persistentCategoria = em.find(Categoria.class, categoria.getId());
-            List<Pictograma> pictogramaListOld = persistentCategoria.getPictogramaList();
-            List<Pictograma> pictogramaListNew = categoria.getPictogramaList();
+            Collection<Pictograma> pictogramaCollectionOld = persistentCategoria.getPictogramaCollection();
+            Collection<Pictograma> pictogramaCollectionNew = categoria.getPictogramaCollection();
             List<String> illegalOrphanMessages = null;
-            for (Pictograma pictogramaListOldPictograma : pictogramaListOld) {
-                if (!pictogramaListNew.contains(pictogramaListOldPictograma)) {
+            for (Pictograma pictogramaCollectionOldPictograma : pictogramaCollectionOld) {
+                if (!pictogramaCollectionNew.contains(pictogramaCollectionOldPictograma)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Pictograma " + pictogramaListOldPictograma + " since its categoriaid field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Pictograma " + pictogramaCollectionOldPictograma + " since its categoriaid field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            List<Pictograma> attachedPictogramaListNew = new ArrayList<Pictograma>();
-            for (Pictograma pictogramaListNewPictogramaToAttach : pictogramaListNew) {
-                pictogramaListNewPictogramaToAttach = em.getReference(pictogramaListNewPictogramaToAttach.getClass(), pictogramaListNewPictogramaToAttach.getId());
-                attachedPictogramaListNew.add(pictogramaListNewPictogramaToAttach);
+            Collection<Pictograma> attachedPictogramaCollectionNew = new ArrayList<Pictograma>();
+            for (Pictograma pictogramaCollectionNewPictogramaToAttach : pictogramaCollectionNew) {
+                pictogramaCollectionNewPictogramaToAttach = em.getReference(pictogramaCollectionNewPictogramaToAttach.getClass(), pictogramaCollectionNewPictogramaToAttach.getId());
+                attachedPictogramaCollectionNew.add(pictogramaCollectionNewPictogramaToAttach);
             }
-            pictogramaListNew = attachedPictogramaListNew;
-            categoria.setPictogramaList(pictogramaListNew);
+            pictogramaCollectionNew = attachedPictogramaCollectionNew;
+            categoria.setPictogramaCollection(pictogramaCollectionNew);
             categoria = em.merge(categoria);
-            for (Pictograma pictogramaListNewPictograma : pictogramaListNew) {
-                if (!pictogramaListOld.contains(pictogramaListNewPictograma)) {
-                    Categoria oldCategoriaidOfPictogramaListNewPictograma = pictogramaListNewPictograma.getCategoriaid();
-                    pictogramaListNewPictograma.setCategoriaid(categoria);
-                    pictogramaListNewPictograma = em.merge(pictogramaListNewPictograma);
-                    if (oldCategoriaidOfPictogramaListNewPictograma != null && !oldCategoriaidOfPictogramaListNewPictograma.equals(categoria)) {
-                        oldCategoriaidOfPictogramaListNewPictograma.getPictogramaList().remove(pictogramaListNewPictograma);
-                        oldCategoriaidOfPictogramaListNewPictograma = em.merge(oldCategoriaidOfPictogramaListNewPictograma);
+            for (Pictograma pictogramaCollectionNewPictograma : pictogramaCollectionNew) {
+                if (!pictogramaCollectionOld.contains(pictogramaCollectionNewPictograma)) {
+                    Categoria oldCategoriaidOfPictogramaCollectionNewPictograma = pictogramaCollectionNewPictograma.getCategoriaid();
+                    pictogramaCollectionNewPictograma.setCategoriaid(categoria);
+                    pictogramaCollectionNewPictograma = em.merge(pictogramaCollectionNewPictograma);
+                    if (oldCategoriaidOfPictogramaCollectionNewPictograma != null && !oldCategoriaidOfPictogramaCollectionNewPictograma.equals(categoria)) {
+                        oldCategoriaidOfPictogramaCollectionNewPictograma.getPictogramaCollection().remove(pictogramaCollectionNewPictograma);
+                        oldCategoriaidOfPictogramaCollectionNewPictograma = em.merge(oldCategoriaidOfPictogramaCollectionNewPictograma);
                     }
                 }
             }
@@ -141,12 +142,12 @@ public class CategoriaJpaController implements Serializable {
                 throw new NonexistentEntityException("The categoria with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Pictograma> pictogramaListOrphanCheck = categoria.getPictogramaList();
-            for (Pictograma pictogramaListOrphanCheckPictograma : pictogramaListOrphanCheck) {
+            Collection<Pictograma> pictogramaCollectionOrphanCheck = categoria.getPictogramaCollection();
+            for (Pictograma pictogramaCollectionOrphanCheckPictograma : pictogramaCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Categoria (" + categoria + ") cannot be destroyed since the Pictograma " + pictogramaListOrphanCheckPictograma + " in its pictogramaList field has a non-nullable categoriaid field.");
+                illegalOrphanMessages.add("This Categoria (" + categoria + ") cannot be destroyed since the Pictograma " + pictogramaCollectionOrphanCheckPictograma + " in its pictogramaCollection field has a non-nullable categoriaid field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);

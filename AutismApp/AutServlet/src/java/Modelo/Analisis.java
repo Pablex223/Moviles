@@ -6,9 +6,8 @@
 package Modelo;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -23,7 +22,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Pablo
+ * @author luisf
  */
 @Entity
 @Table(name = "analisis")
@@ -48,19 +47,11 @@ public class Analisis implements Serializable {
     private Integer areaLinguistica;
     @Column(name = "areaConductas")
     private Integer areaConductas;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "analisisid")
-    private List<Persona> personaList;
+    @OneToMany(mappedBy = "analisisid")
+    private Collection<Persona> personaCollection;
 
     public Analisis() {
     }
-    
-    public Analisis(int id, int areaS,int areaL,int areaC){
-        this.id= id;
-        this.areaSocial=areaS;
-        this.areaLinguistica=areaL;
-        this.areaConductas= areaC;
-    }
-    
 
     public Analisis(Integer id) {
         this.id = id;
@@ -99,12 +90,12 @@ public class Analisis implements Serializable {
     }
 
     @XmlTransient
-    public List<Persona> getPersonaList() {
-        return personaList;
+    public Collection<Persona> getPersonaCollection() {
+        return personaCollection;
     }
 
-    public void setPersonaList(List<Persona> personaList) {
-        this.personaList = personaList;
+    public void setPersonaCollection(Collection<Persona> personaCollection) {
+        this.personaCollection = personaCollection;
     }
 
     @Override
@@ -132,29 +123,4 @@ public class Analisis implements Serializable {
         return "Modelo.Analisis[ id=" + id + " ]";
     }
     
-    
-    
-    
-    public org.json.JSONObject toJson(){
-        return new org.json.JSONObject()
-                .put("id", this.id)
-                .put("areaS", this.areaSocial)
-                .put("areaL",this.areaLinguistica)
-                .put("areaC", this.areaConductas);
-    } 
-    
-    public static Analisis fromJson(org.json.JSONObject jo)
-            throws org.json.JSONException
-    {
-        return new Analisis(
-                jo.getInt("id"),
-                jo.getInt("areaS"),
-                jo.getInt("areaL"),
-                jo.getInt("areaC")
-                               
-            );  
 }
-    
-    
-}
-

@@ -8,4 +8,10 @@
 /moviles-masterBack/nbproject/private/
 /FrontEnd CONSOLE/build/
 /AutismApp/AutServlet/nbproject/private/
+<<<<<<< HEAD
 /AutismApp/AutServlet/build/
+=======
+*.java
+*.jar
+>>>>>>> 1732ced827e0862593c76ebc2e5d3ed0cf3206e0
+/AutismApp/AutServlet/dist/

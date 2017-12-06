@@ -3,24 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package JPA;
+package jpa;
 
-import JPA.exceptions.IllegalOrphanException;
-import JPA.exceptions.NonexistentEntityException;
-import JPA.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Modelo.Analisis;
-import Modelo.Usuario;
 import Modelo.Cuenta;
 import Modelo.Persona;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import jpa.exceptions.IllegalOrphanException;
+import jpa.exceptions.NonexistentEntityException;
+import jpa.exceptions.PreexistingEntityException;
 
 /**
  *
@@ -38,8 +38,8 @@ public class PersonaJpaController implements Serializable {
     }
 
     public void create(Persona persona) throws PreexistingEntityException, Exception {
-        if (persona.getCuentaList() == null) {
-            persona.setCuentaList(new ArrayList<Cuenta>());
+        if (persona.getCuentaCollection() == null) {
+            persona.setCuentaCollection(new ArrayList<Cuenta>());
         }
         EntityManager em = null;
         try {
@@ -50,38 +50,29 @@ public class PersonaJpaController implements Serializable {
                 analisisid = em.getReference(analisisid.getClass(), analisisid.getId());
                 persona.setAnalisisid(analisisid);
             }
-            Usuario loginusuario = persona.getLoginusuario();
-            if (loginusuario != null) {
-                loginusuario = em.getReference(loginusuario.getClass(), loginusuario.getUsuario());
-                persona.setLoginusuario(loginusuario);
+            Collection<Cuenta> attachedCuentaCollection = new ArrayList<Cuenta>();
+            for (Cuenta cuentaCollectionCuentaToAttach : persona.getCuentaCollection()) {
+                cuentaCollectionCuentaToAttach = em.getReference(cuentaCollectionCuentaToAttach.getClass(), cuentaCollectionCuentaToAttach.getId());
+                attachedCuentaCollection.add(cuentaCollectionCuentaToAttach);
             }
-            List<Cuenta> attachedCuentaList = new ArrayList<Cuenta>();
-            for (Cuenta cuentaListCuentaToAttach : persona.getCuentaList()) {
-                cuentaListCuentaToAttach = em.getReference(cuentaListCuentaToAttach.getClass(), cuentaListCuentaToAttach.getId());
-                attachedCuentaList.add(cuentaListCuentaToAttach);
-            }
-            persona.setCuentaList(attachedCuentaList);
+            persona.setCuentaCollection(attachedCuentaCollection);
             em.persist(persona);
             if (analisisid != null) {
-                analisisid.getPersonaList().add(persona);
+                analisisid.getPersonaCollection().add(persona);
                 analisisid = em.merge(analisisid);
             }
-            if (loginusuario != null) {
-                loginusuario.getPersonaList().add(persona);
-                loginusuario = em.merge(loginusuario);
-            }
-            for (Cuenta cuentaListCuenta : persona.getCuentaList()) {
-                Persona oldUsuarionombreOfCuentaListCuenta = cuentaListCuenta.getUsuarionombre();
-                cuentaListCuenta.setUsuarionombre(persona);
-                cuentaListCuenta = em.merge(cuentaListCuenta);
-                if (oldUsuarionombreOfCuentaListCuenta != null) {
-                    oldUsuarionombreOfCuentaListCuenta.getCuentaList().remove(cuentaListCuenta);
-                    oldUsuarionombreOfCuentaListCuenta = em.merge(oldUsuarionombreOfCuentaListCuenta);
+            for (Cuenta cuentaCollectionCuenta : persona.getCuentaCollection()) {
+                Persona oldPersonausuarioOfCuentaCollectionCuenta = cuentaCollectionCuenta.getPersonausuario();
+                cuentaCollectionCuenta.setPersonausuario(persona);
+                cuentaCollectionCuenta = em.merge(cuentaCollectionCuenta);
+                if (oldPersonausuarioOfCuentaCollectionCuenta != null) {
+                    oldPersonausuarioOfCuentaCollectionCuenta.getCuentaCollection().remove(cuentaCollectionCuenta);
+                    oldPersonausuarioOfCuentaCollectionCuenta = em.merge(oldPersonausuarioOfCuentaCollectionCuenta);
                 }
             }
             em.getTransaction().commit();
         } catch (Exception ex) {
-            if (findPersona(persona.getNombre()) != null) {
+            if (findPersona(persona.getUsuario()) != null) {
                 throw new PreexistingEntityException("Persona " + persona + " already exists.", ex);
             }
             throw ex;
@@ -97,20 +88,18 @@ public class PersonaJpaController implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Persona persistentPersona = em.find(Persona.class, persona.getNombre());
+            Persona persistentPersona = em.find(Persona.class, persona.getUsuario());
             Analisis analisisidOld = persistentPersona.getAnalisisid();
             Analisis analisisidNew = persona.getAnalisisid();
-            Usuario loginusuarioOld = persistentPersona.getLoginusuario();
-            Usuario loginusuarioNew = persona.getLoginusuario();
-            List<Cuenta> cuentaListOld = persistentPersona.getCuentaList();
-            List<Cuenta> cuentaListNew = persona.getCuentaList();
+            Collection<Cuenta> cuentaCollectionOld = persistentPersona.getCuentaCollection();
+            Collection<Cuenta> cuentaCollectionNew = persona.getCuentaCollection();
             List<String> illegalOrphanMessages = null;
-            for (Cuenta cuentaListOldCuenta : cuentaListOld) {
-                if (!cuentaListNew.contains(cuentaListOldCuenta)) {
+            for (Cuenta cuentaCollectionOldCuenta : cuentaCollectionOld) {
+                if (!cuentaCollectionNew.contains(cuentaCollectionOldCuenta)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Cuenta " + cuentaListOldCuenta + " since its usuarionombre field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Cuenta " + cuentaCollectionOldCuenta + " since its personausuario field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
@@ -120,42 +109,30 @@ public class PersonaJpaController implements Serializable {
                 analisisidNew = em.getReference(analisisidNew.getClass(), analisisidNew.getId());
                 persona.setAnalisisid(analisisidNew);
             }
-            if (loginusuarioNew != null) {
-                loginusuarioNew = em.getReference(loginusuarioNew.getClass(), loginusuarioNew.getUsuario());
-                persona.setLoginusuario(loginusuarioNew);
+            Collection<Cuenta> attachedCuentaCollectionNew = new ArrayList<Cuenta>();
+            for (Cuenta cuentaCollectionNewCuentaToAttach : cuentaCollectionNew) {
+                cuentaCollectionNewCuentaToAttach = em.getReference(cuentaCollectionNewCuentaToAttach.getClass(), cuentaCollectionNewCuentaToAttach.getId());
+                attachedCuentaCollectionNew.add(cuentaCollectionNewCuentaToAttach);
             }
-            List<Cuenta> attachedCuentaListNew = new ArrayList<Cuenta>();
-            for (Cuenta cuentaListNewCuentaToAttach : cuentaListNew) {
-                cuentaListNewCuentaToAttach = em.getReference(cuentaListNewCuentaToAttach.getClass(), cuentaListNewCuentaToAttach.getId());
-                attachedCuentaListNew.add(cuentaListNewCuentaToAttach);
-            }
-            cuentaListNew = attachedCuentaListNew;
-            persona.setCuentaList(cuentaListNew);
+            cuentaCollectionNew = attachedCuentaCollectionNew;
+            persona.setCuentaCollection(cuentaCollectionNew);
             persona = em.merge(persona);
             if (analisisidOld != null && !analisisidOld.equals(analisisidNew)) {
-                analisisidOld.getPersonaList().remove(persona);
+                analisisidOld.getPersonaCollection().remove(persona);
                 analisisidOld = em.merge(analisisidOld);
             }
             if (analisisidNew != null && !analisisidNew.equals(analisisidOld)) {
-                analisisidNew.getPersonaList().add(persona);
+                analisisidNew.getPersonaCollection().add(persona);
                 analisisidNew = em.merge(analisisidNew);
             }
-            if (loginusuarioOld != null && !loginusuarioOld.equals(loginusuarioNew)) {
-                loginusuarioOld.getPersonaList().remove(persona);
-                loginusuarioOld = em.merge(loginusuarioOld);
-            }
-            if (loginusuarioNew != null && !loginusuarioNew.equals(loginusuarioOld)) {
-                loginusuarioNew.getPersonaList().add(persona);
-                loginusuarioNew = em.merge(loginusuarioNew);
-            }
-            for (Cuenta cuentaListNewCuenta : cuentaListNew) {
-                if (!cuentaListOld.contains(cuentaListNewCuenta)) {
-                    Persona oldUsuarionombreOfCuentaListNewCuenta = cuentaListNewCuenta.getUsuarionombre();
-                    cuentaListNewCuenta.setUsuarionombre(persona);
-                    cuentaListNewCuenta = em.merge(cuentaListNewCuenta);
-                    if (oldUsuarionombreOfCuentaListNewCuenta != null && !oldUsuarionombreOfCuentaListNewCuenta.equals(persona)) {
-                        oldUsuarionombreOfCuentaListNewCuenta.getCuentaList().remove(cuentaListNewCuenta);
-                        oldUsuarionombreOfCuentaListNewCuenta = em.merge(oldUsuarionombreOfCuentaListNewCuenta);
+            for (Cuenta cuentaCollectionNewCuenta : cuentaCollectionNew) {
+                if (!cuentaCollectionOld.contains(cuentaCollectionNewCuenta)) {
+                    Persona oldPersonausuarioOfCuentaCollectionNewCuenta = cuentaCollectionNewCuenta.getPersonausuario();
+                    cuentaCollectionNewCuenta.setPersonausuario(persona);
+                    cuentaCollectionNewCuenta = em.merge(cuentaCollectionNewCuenta);
+                    if (oldPersonausuarioOfCuentaCollectionNewCuenta != null && !oldPersonausuarioOfCuentaCollectionNewCuenta.equals(persona)) {
+                        oldPersonausuarioOfCuentaCollectionNewCuenta.getCuentaCollection().remove(cuentaCollectionNewCuenta);
+                        oldPersonausuarioOfCuentaCollectionNewCuenta = em.merge(oldPersonausuarioOfCuentaCollectionNewCuenta);
                     }
                 }
             }
@@ -163,7 +140,7 @@ public class PersonaJpaController implements Serializable {
         } catch (Exception ex) {
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                String id = persona.getNombre();
+                String id = persona.getUsuario();
                 if (findPersona(id) == null) {
                     throw new NonexistentEntityException("The persona with id " + id + " no longer exists.");
                 }
@@ -184,30 +161,25 @@ public class PersonaJpaController implements Serializable {
             Persona persona;
             try {
                 persona = em.getReference(Persona.class, id);
-                persona.getNombre();
+                persona.getUsuario();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The persona with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Cuenta> cuentaListOrphanCheck = persona.getCuentaList();
-            for (Cuenta cuentaListOrphanCheckCuenta : cuentaListOrphanCheck) {
+            Collection<Cuenta> cuentaCollectionOrphanCheck = persona.getCuentaCollection();
+            for (Cuenta cuentaCollectionOrphanCheckCuenta : cuentaCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Persona (" + persona + ") cannot be destroyed since the Cuenta " + cuentaListOrphanCheckCuenta + " in its cuentaList field has a non-nullable usuarionombre field.");
+                illegalOrphanMessages.add("This Persona (" + persona + ") cannot be destroyed since the Cuenta " + cuentaCollectionOrphanCheckCuenta + " in its cuentaCollection field has a non-nullable personausuario field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             Analisis analisisid = persona.getAnalisisid();
             if (analisisid != null) {
-                analisisid.getPersonaList().remove(persona);
+                analisisid.getPersonaCollection().remove(persona);
                 analisisid = em.merge(analisisid);
-            }
-            Usuario loginusuario = persona.getLoginusuario();
-            if (loginusuario != null) {
-                loginusuario.getPersonaList().remove(persona);
-                loginusuario = em.merge(loginusuario);
             }
             em.remove(persona);
             em.getTransaction().commit();

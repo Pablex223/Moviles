@@ -6,7 +6,7 @@
 package Modelo;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,25 +20,32 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import org.json.JSONObject;
 
 /**
  *
- * @author Pablo
+ * @author luisf
  */
 @Entity
 @Table(name = "persona")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Persona.findAll", query = "SELECT p FROM Persona p")
+    , @NamedQuery(name = "Persona.findByUsuario", query = "SELECT p FROM Persona p WHERE p.usuario = :usuario")
     , @NamedQuery(name = "Persona.findByNombre", query = "SELECT p FROM Persona p WHERE p.nombre = :nombre")
     , @NamedQuery(name = "Persona.findByPrimerApellido", query = "SELECT p FROM Persona p WHERE p.primerApellido = :primerApellido")
     , @NamedQuery(name = "Persona.findBySegundoApellido", query = "SELECT p FROM Persona p WHERE p.segundoApellido = :segundoApellido")
     , @NamedQuery(name = "Persona.findByEdad", query = "SELECT p FROM Persona p WHERE p.edad = :edad")
-    , @NamedQuery(name = "Persona.findByCorreo", query = "SELECT p FROM Persona p WHERE p.correo = :correo")})
+    , @NamedQuery(name = "Persona.findByCorreo", query = "SELECT p FROM Persona p WHERE p.correo = :correo")
+    , @NamedQuery(name = "Persona.findByLoginusuario", query = "SELECT p FROM Persona p WHERE p.loginusuario = :loginusuario")
+    , @NamedQuery(name = "Persona.findByCont", query = "SELECT p FROM Persona p WHERE p.cont = :cont")})
 public class Persona implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @Basic(optional = false)
+    @Column(name = "usuario")
+    private String usuario;
     @Basic(optional = false)
     @Column(name = "nombre")
     private String nombre;
@@ -53,27 +60,45 @@ public class Persona implements Serializable {
     private int edad;
     @Column(name = "correo")
     private String correo;
+    @Basic(optional = false)
+    @Column(name = "Login_usuario")
+    private String loginusuario;
+    @Basic(optional = false)
+    @Column(name = "cont")
+    private String cont;
     @JoinColumn(name = "Analisis_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private Analisis analisisid;
-    @JoinColumn(name = "Login_usuario", referencedColumnName = "usuario")
-    @ManyToOne(optional = false)
-    private Usuario loginusuario;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuarionombre")
-    private List<Cuenta> cuentaList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personausuario")
+    private Collection<Cuenta> cuentaCollection;
 
     public Persona() {
     }
 
-    public Persona(String nombre) {
-        this.nombre = nombre;
+    public Persona(String usuario) {
+        this.usuario = usuario;
     }
 
-    public Persona(String nombre, String primerApellido, String segundoApellido, int edad) {
+    public static Persona fromJson(JSONObject jo){
+        return new Persona(jo.getString("usuario"),jo.getString("nombre"),jo.getString("pa"),jo.getString("sa"),jo.getInt("edad"),"  ",jo.getString("cont"));
+    }
+    
+    public Persona(String usuario, String nombre, String primerApellido, String segundoApellido, int edad, String loginusuario, String cont) {
+        this.usuario = usuario;
         this.nombre = nombre;
         this.primerApellido = primerApellido;
         this.segundoApellido = segundoApellido;
         this.edad = edad;
+        this.loginusuario = loginusuario;
+        this.cont = cont;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public String getNombre() {
@@ -116,6 +141,22 @@ public class Persona implements Serializable {
         this.correo = correo;
     }
 
+    public String getLoginusuario() {
+        return loginusuario;
+    }
+
+    public void setLoginusuario(String loginusuario) {
+        this.loginusuario = loginusuario;
+    }
+
+    public String getCont() {
+        return cont;
+    }
+
+    public void setCont(String cont) {
+        this.cont = cont;
+    }
+
     public Analisis getAnalisisid() {
         return analisisid;
     }
@@ -124,27 +165,19 @@ public class Persona implements Serializable {
         this.analisisid = analisisid;
     }
 
-    public Usuario getLoginusuario() {
-        return loginusuario;
-    }
-
-    public void setLoginusuario(Usuario loginusuario) {
-        this.loginusuario = loginusuario;
-    }
-
     @XmlTransient
-    public List<Cuenta> getCuentaList() {
-        return cuentaList;
+    public Collection<Cuenta> getCuentaCollection() {
+        return cuentaCollection;
     }
 
-    public void setCuentaList(List<Cuenta> cuentaList) {
-        this.cuentaList = cuentaList;
+    public void setCuentaCollection(Collection<Cuenta> cuentaCollection) {
+        this.cuentaCollection = cuentaCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (nombre != null ? nombre.hashCode() : 0);
+        hash += (usuario != null ? usuario.hashCode() : 0);
         return hash;
     }
 
@@ -155,7 +188,7 @@ public class Persona implements Serializable {
             return false;
         }
         Persona other = (Persona) object;
-        if ((this.nombre == null && other.nombre != null) || (this.nombre != null && !this.nombre.equals(other.nombre))) {
+        if ((this.usuario == null && other.usuario != null) || (this.usuario != null && !this.usuario.equals(other.usuario))) {
             return false;
         }
         return true;
@@ -163,7 +196,9 @@ public class Persona implements Serializable {
 
     @Override
     public String toString() {
-        return "Modelo.Persona[ nombre=" + nombre + " ]";
+        return "Modelo.Persona[ usuario=" + usuario + " ]";
     }
+    
+    
     
 }

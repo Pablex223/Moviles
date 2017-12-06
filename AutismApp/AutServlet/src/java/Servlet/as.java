@@ -5,14 +5,23 @@
  */
 package Servlet;
 
+import Modelo.Persona;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceUnit;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import jpa.PersonaJpaController;
+import jpa.exceptions.PreexistingEntityException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -41,25 +50,40 @@ public class as extends HttpServlet {
             if(Objects.nonNull(act = jo.getString("action"))){
                 switch(act){
                     case "login": loginAct(response, jo.getJSONObject("data")); break;
+                    case "nuevoUsuario": nuevoUsuarioAct(response, jo.getJSONObject("data")) ;break;
                     default:  response.sendError(HttpServletResponse.SC_BAD_REQUEST, "The request sent by the client was syntactically incorrect.");
                 }
             }
             
         }catch(JSONException ex) {
             response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
+        } catch (Exception ex) {
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, ex.getMessage());
         }
         
     }
     
     private void loginAct(HttpServletResponse response, JSONObject data) throws IOException{
-        //String user = data.getString("user");
-        // pass = data.getString("pass");
-        
+       response.setContentType("application/json");
+        PrintWriter pw = response.getWriter();
+        EntityManagerFactory emf = Persistence.createEntityManagerFactory("AutServletPU");
+        Persona persona = new PersonaJpaController(emf).findPersona(data.getString("usuario"));
+        pw.write( new JSONObject().put("login", persona.getCont().equals(data.get("contra"))).toString());
+        pw.flush();             
+    }
+    
+    private void nuevoUsuarioAct(HttpServletResponse response, JSONObject jsonObject) throws Exception {
         response.setContentType("application/json");
         PrintWriter pw = response.getWriter();
-        //data base do login : boolean
-        pw.write("{\"login\": \""+ String.valueOf(true)+"\"}");
-        pw.flush();             
+        try{
+            EntityManagerFactory emf = Persistence.createEntityManagerFactory("AutServletPU");
+            new PersonaJpaController(emf).create(Persona.fromJson(jsonObject));
+            pw.write( new JSONObject().put("success", "Usuario creado con exito.").toString());
+        }catch(PreexistingEntityException ex){
+            pw.write( new JSONObject().put("error", ex.getMessage()).toString());
+        }
+            pw.flush();             
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

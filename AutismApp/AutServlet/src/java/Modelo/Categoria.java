@@ -6,7 +6,7 @@
 package Modelo;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -21,7 +21,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Pablo
+ * @author luisf
  */
 @Entity
 @Table(name = "categoria")
@@ -41,21 +41,20 @@ public class Categoria implements Serializable {
     @Column(name = "nombre")
     private String nombre;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "categoriaid")
-    private List<Pictograma> pictogramaList;
+    private Collection<Pictograma> pictogramaCollection;
 
     public Categoria() {
     }
-    
-    
+
+    public Categoria(Integer id) {
+        this.id = id;
+    }
+
     public Categoria(Integer id, String nombre) {
         this.id = id;
         this.nombre = nombre;
     }
 
-    
-    
-    
-    
     public Integer getId() {
         return id;
     }
@@ -73,12 +72,12 @@ public class Categoria implements Serializable {
     }
 
     @XmlTransient
-    public List<Pictograma> getPictogramaList() {
-        return pictogramaList;
+    public Collection<Pictograma> getPictogramaCollection() {
+        return pictogramaCollection;
     }
 
-    public void setPictogramaList(List<Pictograma> pictogramaList) {
-        this.pictogramaList = pictogramaList;
+    public void setPictogramaCollection(Collection<Pictograma> pictogramaCollection) {
+        this.pictogramaCollection = pictogramaCollection;
     }
 
     @Override
@@ -105,24 +104,5 @@ public class Categoria implements Serializable {
     public String toString() {
         return "Modelo.Categoria[ id=" + id + " ]";
     }
-    
-    
-    public org.json.JSONObject toJson(){
-        return new org.json.JSONObject()
-                .put("id", this.id)
-                .put("nombre", this.nombre);
-    } 
-    
-    public static Categoria fromJson(org.json.JSONObject jo)
-            throws org.json.JSONException
-    {
-        return new Categoria(
-                jo.getInt("id"),
-                jo.getString("nombre")
-                
-                               
-            );  
-}
-    
     
 }

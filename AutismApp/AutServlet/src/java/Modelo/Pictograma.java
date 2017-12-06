@@ -6,7 +6,6 @@
 package Modelo;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,7 +20,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author Pablo
+ * @author luisf
  */
 @Entity
 @Table(name = "pictograma")
@@ -53,10 +52,6 @@ public class Pictograma implements Serializable {
 
     public Pictograma() {
     }
-    
-    
-    
-    
 
     public Pictograma(Integer id) {
         this.id = id;
@@ -132,30 +127,5 @@ public class Pictograma implements Serializable {
     public String toString() {
         return "Modelo.Pictograma[ id=" + id + " ]";
     }
-    
-    
-    
-    
-    public org.json.JSONObject toJson() throws UnsupportedEncodingException{
-        return new org.json.JSONObject()
-                .put("id", this.id)
-                .put("nombre", this.nombre)
-                .put("imagen", new String(this.imagen,"UTF-8"));
-    } 
-    
-    public static Pictograma fromJson(org.json.JSONObject jo)
-            throws org.json.JSONException
-    {
-        return new Pictograma(
-                jo.getInt("id"),
-                jo.getString("nombre"),
-                jo.getString("imagen").getBytes()
-                
-                               
-            );  
-}
-    
-    
-    
     
 }

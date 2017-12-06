@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package JPA;
+package jpa;
 
-import JPA.exceptions.IllegalOrphanException;
-import JPA.exceptions.NonexistentEntityException;
 import Modelo.Analisis;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -15,9 +13,11 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import Modelo.Persona;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import jpa.exceptions.NonexistentEntityException;
 
 /**
  *
@@ -35,27 +35,27 @@ public class AnalisisJpaController implements Serializable {
     }
 
     public void create(Analisis analisis) {
-        if (analisis.getPersonaList() == null) {
-            analisis.setPersonaList(new ArrayList<Persona>());
+        if (analisis.getPersonaCollection() == null) {
+            analisis.setPersonaCollection(new ArrayList<Persona>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            List<Persona> attachedPersonaList = new ArrayList<Persona>();
-            for (Persona personaListPersonaToAttach : analisis.getPersonaList()) {
-                personaListPersonaToAttach = em.getReference(personaListPersonaToAttach.getClass(), personaListPersonaToAttach.getNombre());
-                attachedPersonaList.add(personaListPersonaToAttach);
+            Collection<Persona> attachedPersonaCollection = new ArrayList<Persona>();
+            for (Persona personaCollectionPersonaToAttach : analisis.getPersonaCollection()) {
+                personaCollectionPersonaToAttach = em.getReference(personaCollectionPersonaToAttach.getClass(), personaCollectionPersonaToAttach.getUsuario());
+                attachedPersonaCollection.add(personaCollectionPersonaToAttach);
             }
-            analisis.setPersonaList(attachedPersonaList);
+            analisis.setPersonaCollection(attachedPersonaCollection);
             em.persist(analisis);
-            for (Persona personaListPersona : analisis.getPersonaList()) {
-                Analisis oldAnalisisidOfPersonaListPersona = personaListPersona.getAnalisisid();
-                personaListPersona.setAnalisisid(analisis);
-                personaListPersona = em.merge(personaListPersona);
-                if (oldAnalisisidOfPersonaListPersona != null) {
-                    oldAnalisisidOfPersonaListPersona.getPersonaList().remove(personaListPersona);
-                    oldAnalisisidOfPersonaListPersona = em.merge(oldAnalisisidOfPersonaListPersona);
+            for (Persona personaCollectionPersona : analisis.getPersonaCollection()) {
+                Analisis oldAnalisisidOfPersonaCollectionPersona = personaCollectionPersona.getAnalisisid();
+                personaCollectionPersona.setAnalisisid(analisis);
+                personaCollectionPersona = em.merge(personaCollectionPersona);
+                if (oldAnalisisidOfPersonaCollectionPersona != null) {
+                    oldAnalisisidOfPersonaCollectionPersona.getPersonaCollection().remove(personaCollectionPersona);
+                    oldAnalisisidOfPersonaCollectionPersona = em.merge(oldAnalisisidOfPersonaCollectionPersona);
                 }
             }
             em.getTransaction().commit();
@@ -66,42 +66,36 @@ public class AnalisisJpaController implements Serializable {
         }
     }
 
-    public void edit(Analisis analisis) throws IllegalOrphanException, NonexistentEntityException, Exception {
+    public void edit(Analisis analisis) throws NonexistentEntityException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
             Analisis persistentAnalisis = em.find(Analisis.class, analisis.getId());
-            List<Persona> personaListOld = persistentAnalisis.getPersonaList();
-            List<Persona> personaListNew = analisis.getPersonaList();
-            List<String> illegalOrphanMessages = null;
-            for (Persona personaListOldPersona : personaListOld) {
-                if (!personaListNew.contains(personaListOldPersona)) {
-                    if (illegalOrphanMessages == null) {
-                        illegalOrphanMessages = new ArrayList<String>();
-                    }
-                    illegalOrphanMessages.add("You must retain Persona " + personaListOldPersona + " since its analisisid field is not nullable.");
+            Collection<Persona> personaCollectionOld = persistentAnalisis.getPersonaCollection();
+            Collection<Persona> personaCollectionNew = analisis.getPersonaCollection();
+            Collection<Persona> attachedPersonaCollectionNew = new ArrayList<Persona>();
+            for (Persona personaCollectionNewPersonaToAttach : personaCollectionNew) {
+                personaCollectionNewPersonaToAttach = em.getReference(personaCollectionNewPersonaToAttach.getClass(), personaCollectionNewPersonaToAttach.getUsuario());
+                attachedPersonaCollectionNew.add(personaCollectionNewPersonaToAttach);
+            }
+            personaCollectionNew = attachedPersonaCollectionNew;
+            analisis.setPersonaCollection(personaCollectionNew);
+            analisis = em.merge(analisis);
+            for (Persona personaCollectionOldPersona : personaCollectionOld) {
+                if (!personaCollectionNew.contains(personaCollectionOldPersona)) {
+                    personaCollectionOldPersona.setAnalisisid(null);
+                    personaCollectionOldPersona = em.merge(personaCollectionOldPersona);
                 }
             }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
-            }
-            List<Persona> attachedPersonaListNew = new ArrayList<Persona>();
-            for (Persona personaListNewPersonaToAttach : personaListNew) {
-                personaListNewPersonaToAttach = em.getReference(personaListNewPersonaToAttach.getClass(), personaListNewPersonaToAttach.getNombre());
-                attachedPersonaListNew.add(personaListNewPersonaToAttach);
-            }
-            personaListNew = attachedPersonaListNew;
-            analisis.setPersonaList(personaListNew);
-            analisis = em.merge(analisis);
-            for (Persona personaListNewPersona : personaListNew) {
-                if (!personaListOld.contains(personaListNewPersona)) {
-                    Analisis oldAnalisisidOfPersonaListNewPersona = personaListNewPersona.getAnalisisid();
-                    personaListNewPersona.setAnalisisid(analisis);
-                    personaListNewPersona = em.merge(personaListNewPersona);
-                    if (oldAnalisisidOfPersonaListNewPersona != null && !oldAnalisisidOfPersonaListNewPersona.equals(analisis)) {
-                        oldAnalisisidOfPersonaListNewPersona.getPersonaList().remove(personaListNewPersona);
-                        oldAnalisisidOfPersonaListNewPersona = em.merge(oldAnalisisidOfPersonaListNewPersona);
+            for (Persona personaCollectionNewPersona : personaCollectionNew) {
+                if (!personaCollectionOld.contains(personaCollectionNewPersona)) {
+                    Analisis oldAnalisisidOfPersonaCollectionNewPersona = personaCollectionNewPersona.getAnalisisid();
+                    personaCollectionNewPersona.setAnalisisid(analisis);
+                    personaCollectionNewPersona = em.merge(personaCollectionNewPersona);
+                    if (oldAnalisisidOfPersonaCollectionNewPersona != null && !oldAnalisisidOfPersonaCollectionNewPersona.equals(analisis)) {
+                        oldAnalisisidOfPersonaCollectionNewPersona.getPersonaCollection().remove(personaCollectionNewPersona);
+                        oldAnalisisidOfPersonaCollectionNewPersona = em.merge(oldAnalisisidOfPersonaCollectionNewPersona);
                     }
                 }
             }
@@ -122,7 +116,7 @@ public class AnalisisJpaController implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException {
+    public void destroy(Integer id) throws NonexistentEntityException {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -134,16 +128,10 @@ public class AnalisisJpaController implements Serializable {
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The analisis with id " + id + " no longer exists.", enfe);
             }
-            List<String> illegalOrphanMessages = null;
-            List<Persona> personaListOrphanCheck = analisis.getPersonaList();
-            for (Persona personaListOrphanCheckPersona : personaListOrphanCheck) {
-                if (illegalOrphanMessages == null) {
-                    illegalOrphanMessages = new ArrayList<String>();
-                }
-                illegalOrphanMessages.add("This Analisis (" + analisis + ") cannot be destroyed since the Persona " + personaListOrphanCheckPersona + " in its personaList field has a non-nullable analisisid field.");
-            }
-            if (illegalOrphanMessages != null) {
-                throw new IllegalOrphanException(illegalOrphanMessages);
+            Collection<Persona> personaCollection = analisis.getPersonaCollection();
+            for (Persona personaCollectionPersona : personaCollection) {
+                personaCollectionPersona.setAnalisisid(null);
+                personaCollectionPersona = em.merge(personaCollectionPersona);
             }
             em.remove(analisis);
             em.getTransaction().commit();

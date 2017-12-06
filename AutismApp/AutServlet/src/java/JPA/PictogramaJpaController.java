@@ -3,10 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package JPA;
+package jpa;
 
-import JPA.exceptions.NonexistentEntityException;
-import JPA.exceptions.PreexistingEntityException;
 import java.io.Serializable;
 import javax.persistence.Query;
 import javax.persistence.EntityNotFoundException;
@@ -18,6 +16,8 @@ import Modelo.Pictograma;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import jpa.exceptions.NonexistentEntityException;
+import jpa.exceptions.PreexistingEntityException;
 
 /**
  *
@@ -51,11 +51,11 @@ public class PictogramaJpaController implements Serializable {
             }
             em.persist(pictograma);
             if (categoriaid != null) {
-                categoriaid.getPictogramaList().add(pictograma);
+                categoriaid.getPictogramaCollection().add(pictograma);
                 categoriaid = em.merge(categoriaid);
             }
             if (cuentaid != null) {
-                cuentaid.getPictogramaList().add(pictograma);
+                cuentaid.getPictogramaCollection().add(pictograma);
                 cuentaid = em.merge(cuentaid);
             }
             em.getTransaction().commit();
@@ -91,19 +91,19 @@ public class PictogramaJpaController implements Serializable {
             }
             pictograma = em.merge(pictograma);
             if (categoriaidOld != null && !categoriaidOld.equals(categoriaidNew)) {
-                categoriaidOld.getPictogramaList().remove(pictograma);
+                categoriaidOld.getPictogramaCollection().remove(pictograma);
                 categoriaidOld = em.merge(categoriaidOld);
             }
             if (categoriaidNew != null && !categoriaidNew.equals(categoriaidOld)) {
-                categoriaidNew.getPictogramaList().add(pictograma);
+                categoriaidNew.getPictogramaCollection().add(pictograma);
                 categoriaidNew = em.merge(categoriaidNew);
             }
             if (cuentaidOld != null && !cuentaidOld.equals(cuentaidNew)) {
-                cuentaidOld.getPictogramaList().remove(pictograma);
+                cuentaidOld.getPictogramaCollection().remove(pictograma);
                 cuentaidOld = em.merge(cuentaidOld);
             }
             if (cuentaidNew != null && !cuentaidNew.equals(cuentaidOld)) {
-                cuentaidNew.getPictogramaList().add(pictograma);
+                cuentaidNew.getPictogramaCollection().add(pictograma);
                 cuentaidNew = em.merge(cuentaidNew);
             }
             em.getTransaction().commit();
@@ -137,12 +137,12 @@ public class PictogramaJpaController implements Serializable {
             }
             Categoria categoriaid = pictograma.getCategoriaid();
             if (categoriaid != null) {
-                categoriaid.getPictogramaList().remove(pictograma);
+                categoriaid.getPictogramaCollection().remove(pictograma);
                 categoriaid = em.merge(categoriaid);
             }
             Cuenta cuentaid = pictograma.getCuentaid();
             if (cuentaid != null) {
-                cuentaid.getPictogramaList().remove(pictograma);
+                cuentaid.getPictogramaCollection().remove(pictograma);
                 cuentaid = em.merge(cuentaid);
             }
             em.remove(pictograma);

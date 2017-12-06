@@ -6,7 +6,7 @@
 package Modelo;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Pablo
+ * @author luisf
  */
 @Entity
 @Table(name = "cuenta")
@@ -39,20 +39,14 @@ public class Cuenta implements Serializable {
     @Column(name = "id")
     private Integer id;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cuentaid")
-    private List<Pictograma> pictogramaList;
-    @JoinColumn(name = "Usuario_nombre", referencedColumnName = "nombre")
+    private Collection<Pictograma> pictogramaCollection;
+    @JoinColumn(name = "Persona_usuario", referencedColumnName = "usuario")
     @ManyToOne(optional = false)
-    private Persona usuarionombre;
+    private Persona personausuario;
 
     public Cuenta() {
     }
 
-    public Cuenta(Integer id, Persona usuarionombre) {
-        this.id = id;
-        this.usuarionombre = usuarionombre;
-    }
-
-    
     public Cuenta(Integer id) {
         this.id = id;
     }
@@ -66,20 +60,20 @@ public class Cuenta implements Serializable {
     }
 
     @XmlTransient
-    public List<Pictograma> getPictogramaList() {
-        return pictogramaList;
+    public Collection<Pictograma> getPictogramaCollection() {
+        return pictogramaCollection;
     }
 
-    public void setPictogramaList(List<Pictograma> pictogramaList) {
-        this.pictogramaList = pictogramaList;
+    public void setPictogramaCollection(Collection<Pictograma> pictogramaCollection) {
+        this.pictogramaCollection = pictogramaCollection;
     }
 
-    public Persona getUsuarionombre() {
-        return usuarionombre;
+    public Persona getPersonausuario() {
+        return personausuario;
     }
 
-    public void setUsuarionombre(Persona usuarionombre) {
-        this.usuarionombre = usuarionombre;
+    public void setPersonausuario(Persona personausuario) {
+        this.personausuario = personausuario;
     }
 
     @Override
@@ -106,26 +100,5 @@ public class Cuenta implements Serializable {
     public String toString() {
         return "Modelo.Cuenta[ id=" + id + " ]";
     }
-    
-    
-    /*
-    public org.json.JSONObject toJson(){
-        return new org.json.JSONObject()
-                .put("id", this.id)
-                .put("usuarioN",this.usuarionombre.toJson());
-    } 
-    
-    public static Cuenta fromJson(org.json.JSONObject jo)
-            throws org.json.JSONException
-    {
-        return new Cuenta(
-                jo.getInt("id"),
-                Persona.fromJson(jo.getJSONObject("usuarioN"))
-                
-            );  
-  
-}
-    */  
-    
     
 }
