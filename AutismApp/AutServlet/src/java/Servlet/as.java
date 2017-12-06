@@ -84,9 +84,9 @@ public class as extends HttpServlet {
         try{
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("AutServletPU");
             new PersonaJpaController(emf).create(Persona.fromJson(jsonObject));
-            pw.write( new JSONObject().put("success", "Usuario creado con exito.").toString());
+            pw.write( new JSONObject().put("success", true).toString());
         }catch(PreexistingEntityException ex){
-            pw.write( new JSONObject().put("error", ex.getMessage()).toString());
+            pw.write( new JSONObject().put("success", false).toString());
         }
             pw.flush();             
         
@@ -99,11 +99,15 @@ public class as extends HttpServlet {
             EntityManagerFactory emf = Persistence.createEntityManagerFactory("AutServletPU");
             Persona p = Persona.fromJson(jsonObject);
             p.setCuentaCollection(new ArrayList<>());
-            //p.setAnalisisid(new Analisis( jsonObject.getInt("analisis")));
+            try{
+                int aInt = jsonObject.getInt("analisis");
+                p.setAnalisisid(new Analisis(aInt));
+            }catch(Exception ex){           
+            }
             new PersonaJpaController(emf).edit(p);
-            pw.write( new JSONObject().put("success", "Usuario editado con exito.").toString());
+            pw.write( new JSONObject().put("success", true).toString());
         }catch(Exception ex){
-            pw.write( new JSONObject().put("error", ex.getMessage()).toString());
+            pw.write( new JSONObject().put("success", false).toString());
         }
             pw.flush();             
         
