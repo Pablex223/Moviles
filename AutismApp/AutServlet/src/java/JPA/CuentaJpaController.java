@@ -3,11 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package JPA;
+package jpa;
 
-import JPA.exceptions.IllegalOrphanException;
-import JPA.exceptions.NonexistentEntityException;
-import JPA.exceptions.PreexistingEntityException;
 import Modelo.Cuenta;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -17,9 +14,13 @@ import javax.persistence.criteria.Root;
 import Modelo.Persona;
 import Modelo.Pictograma;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import jpa.exceptions.IllegalOrphanException;
+import jpa.exceptions.NonexistentEntityException;
+import jpa.exceptions.PreexistingEntityException;
 
 /**
  *
@@ -37,36 +38,36 @@ public class CuentaJpaController implements Serializable {
     }
 
     public void create(Cuenta cuenta) throws PreexistingEntityException, Exception {
-        if (cuenta.getPictogramaList() == null) {
-            cuenta.setPictogramaList(new ArrayList<Pictograma>());
+        if (cuenta.getPictogramaCollection() == null) {
+            cuenta.setPictogramaCollection(new ArrayList<Pictograma>());
         }
         EntityManager em = null;
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Persona usuarionombre = cuenta.getUsuarionombre();
-            if (usuarionombre != null) {
-                usuarionombre = em.getReference(usuarionombre.getClass(), usuarionombre.getNombre());
-                cuenta.setUsuarionombre(usuarionombre);
+            Persona personausuario = cuenta.getPersonausuario();
+            if (personausuario != null) {
+                personausuario = em.getReference(personausuario.getClass(), personausuario.getUsuario());
+                cuenta.setPersonausuario(personausuario);
             }
-            List<Pictograma> attachedPictogramaList = new ArrayList<Pictograma>();
-            for (Pictograma pictogramaListPictogramaToAttach : cuenta.getPictogramaList()) {
-                pictogramaListPictogramaToAttach = em.getReference(pictogramaListPictogramaToAttach.getClass(), pictogramaListPictogramaToAttach.getId());
-                attachedPictogramaList.add(pictogramaListPictogramaToAttach);
+            Collection<Pictograma> attachedPictogramaCollection = new ArrayList<Pictograma>();
+            for (Pictograma pictogramaCollectionPictogramaToAttach : cuenta.getPictogramaCollection()) {
+                pictogramaCollectionPictogramaToAttach = em.getReference(pictogramaCollectionPictogramaToAttach.getClass(), pictogramaCollectionPictogramaToAttach.getId());
+                attachedPictogramaCollection.add(pictogramaCollectionPictogramaToAttach);
             }
-            cuenta.setPictogramaList(attachedPictogramaList);
+            cuenta.setPictogramaCollection(attachedPictogramaCollection);
             em.persist(cuenta);
-            if (usuarionombre != null) {
-                usuarionombre.getCuentaList().add(cuenta);
-                usuarionombre = em.merge(usuarionombre);
+            if (personausuario != null) {
+                personausuario.getCuentaCollection().add(cuenta);
+                personausuario = em.merge(personausuario);
             }
-            for (Pictograma pictogramaListPictograma : cuenta.getPictogramaList()) {
-                Cuenta oldCuentaidOfPictogramaListPictograma = pictogramaListPictograma.getCuentaid();
-                pictogramaListPictograma.setCuentaid(cuenta);
-                pictogramaListPictograma = em.merge(pictogramaListPictograma);
-                if (oldCuentaidOfPictogramaListPictograma != null) {
-                    oldCuentaidOfPictogramaListPictograma.getPictogramaList().remove(pictogramaListPictograma);
-                    oldCuentaidOfPictogramaListPictograma = em.merge(oldCuentaidOfPictogramaListPictograma);
+            for (Pictograma pictogramaCollectionPictograma : cuenta.getPictogramaCollection()) {
+                Cuenta oldCuentaidOfPictogramaCollectionPictograma = pictogramaCollectionPictograma.getCuentaid();
+                pictogramaCollectionPictograma.setCuentaid(cuenta);
+                pictogramaCollectionPictograma = em.merge(pictogramaCollectionPictograma);
+                if (oldCuentaidOfPictogramaCollectionPictograma != null) {
+                    oldCuentaidOfPictogramaCollectionPictograma.getPictogramaCollection().remove(pictogramaCollectionPictograma);
+                    oldCuentaidOfPictogramaCollectionPictograma = em.merge(oldCuentaidOfPictogramaCollectionPictograma);
                 }
             }
             em.getTransaction().commit();
@@ -88,50 +89,50 @@ public class CuentaJpaController implements Serializable {
             em = getEntityManager();
             em.getTransaction().begin();
             Cuenta persistentCuenta = em.find(Cuenta.class, cuenta.getId());
-            Persona usuarionombreOld = persistentCuenta.getUsuarionombre();
-            Persona usuarionombreNew = cuenta.getUsuarionombre();
-            List<Pictograma> pictogramaListOld = persistentCuenta.getPictogramaList();
-            List<Pictograma> pictogramaListNew = cuenta.getPictogramaList();
+            Persona personausuarioOld = persistentCuenta.getPersonausuario();
+            Persona personausuarioNew = cuenta.getPersonausuario();
+            Collection<Pictograma> pictogramaCollectionOld = persistentCuenta.getPictogramaCollection();
+            Collection<Pictograma> pictogramaCollectionNew = cuenta.getPictogramaCollection();
             List<String> illegalOrphanMessages = null;
-            for (Pictograma pictogramaListOldPictograma : pictogramaListOld) {
-                if (!pictogramaListNew.contains(pictogramaListOldPictograma)) {
+            for (Pictograma pictogramaCollectionOldPictograma : pictogramaCollectionOld) {
+                if (!pictogramaCollectionNew.contains(pictogramaCollectionOldPictograma)) {
                     if (illegalOrphanMessages == null) {
                         illegalOrphanMessages = new ArrayList<String>();
                     }
-                    illegalOrphanMessages.add("You must retain Pictograma " + pictogramaListOldPictograma + " since its cuentaid field is not nullable.");
+                    illegalOrphanMessages.add("You must retain Pictograma " + pictogramaCollectionOldPictograma + " since its cuentaid field is not nullable.");
                 }
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            if (usuarionombreNew != null) {
-                usuarionombreNew = em.getReference(usuarionombreNew.getClass(), usuarionombreNew.getNombre());
-                cuenta.setUsuarionombre(usuarionombreNew);
+            if (personausuarioNew != null) {
+                personausuarioNew = em.getReference(personausuarioNew.getClass(), personausuarioNew.getUsuario());
+                cuenta.setPersonausuario(personausuarioNew);
             }
-            List<Pictograma> attachedPictogramaListNew = new ArrayList<Pictograma>();
-            for (Pictograma pictogramaListNewPictogramaToAttach : pictogramaListNew) {
-                pictogramaListNewPictogramaToAttach = em.getReference(pictogramaListNewPictogramaToAttach.getClass(), pictogramaListNewPictogramaToAttach.getId());
-                attachedPictogramaListNew.add(pictogramaListNewPictogramaToAttach);
+            Collection<Pictograma> attachedPictogramaCollectionNew = new ArrayList<Pictograma>();
+            for (Pictograma pictogramaCollectionNewPictogramaToAttach : pictogramaCollectionNew) {
+                pictogramaCollectionNewPictogramaToAttach = em.getReference(pictogramaCollectionNewPictogramaToAttach.getClass(), pictogramaCollectionNewPictogramaToAttach.getId());
+                attachedPictogramaCollectionNew.add(pictogramaCollectionNewPictogramaToAttach);
             }
-            pictogramaListNew = attachedPictogramaListNew;
-            cuenta.setPictogramaList(pictogramaListNew);
+            pictogramaCollectionNew = attachedPictogramaCollectionNew;
+            cuenta.setPictogramaCollection(pictogramaCollectionNew);
             cuenta = em.merge(cuenta);
-            if (usuarionombreOld != null && !usuarionombreOld.equals(usuarionombreNew)) {
-                usuarionombreOld.getCuentaList().remove(cuenta);
-                usuarionombreOld = em.merge(usuarionombreOld);
+            if (personausuarioOld != null && !personausuarioOld.equals(personausuarioNew)) {
+                personausuarioOld.getCuentaCollection().remove(cuenta);
+                personausuarioOld = em.merge(personausuarioOld);
             }
-            if (usuarionombreNew != null && !usuarionombreNew.equals(usuarionombreOld)) {
-                usuarionombreNew.getCuentaList().add(cuenta);
-                usuarionombreNew = em.merge(usuarionombreNew);
+            if (personausuarioNew != null && !personausuarioNew.equals(personausuarioOld)) {
+                personausuarioNew.getCuentaCollection().add(cuenta);
+                personausuarioNew = em.merge(personausuarioNew);
             }
-            for (Pictograma pictogramaListNewPictograma : pictogramaListNew) {
-                if (!pictogramaListOld.contains(pictogramaListNewPictograma)) {
-                    Cuenta oldCuentaidOfPictogramaListNewPictograma = pictogramaListNewPictograma.getCuentaid();
-                    pictogramaListNewPictograma.setCuentaid(cuenta);
-                    pictogramaListNewPictograma = em.merge(pictogramaListNewPictograma);
-                    if (oldCuentaidOfPictogramaListNewPictograma != null && !oldCuentaidOfPictogramaListNewPictograma.equals(cuenta)) {
-                        oldCuentaidOfPictogramaListNewPictograma.getPictogramaList().remove(pictogramaListNewPictograma);
-                        oldCuentaidOfPictogramaListNewPictograma = em.merge(oldCuentaidOfPictogramaListNewPictograma);
+            for (Pictograma pictogramaCollectionNewPictograma : pictogramaCollectionNew) {
+                if (!pictogramaCollectionOld.contains(pictogramaCollectionNewPictograma)) {
+                    Cuenta oldCuentaidOfPictogramaCollectionNewPictograma = pictogramaCollectionNewPictograma.getCuentaid();
+                    pictogramaCollectionNewPictograma.setCuentaid(cuenta);
+                    pictogramaCollectionNewPictograma = em.merge(pictogramaCollectionNewPictograma);
+                    if (oldCuentaidOfPictogramaCollectionNewPictograma != null && !oldCuentaidOfPictogramaCollectionNewPictograma.equals(cuenta)) {
+                        oldCuentaidOfPictogramaCollectionNewPictograma.getPictogramaCollection().remove(pictogramaCollectionNewPictograma);
+                        oldCuentaidOfPictogramaCollectionNewPictograma = em.merge(oldCuentaidOfPictogramaCollectionNewPictograma);
                     }
                 }
             }
@@ -165,20 +166,20 @@ public class CuentaJpaController implements Serializable {
                 throw new NonexistentEntityException("The cuenta with id " + id + " no longer exists.", enfe);
             }
             List<String> illegalOrphanMessages = null;
-            List<Pictograma> pictogramaListOrphanCheck = cuenta.getPictogramaList();
-            for (Pictograma pictogramaListOrphanCheckPictograma : pictogramaListOrphanCheck) {
+            Collection<Pictograma> pictogramaCollectionOrphanCheck = cuenta.getPictogramaCollection();
+            for (Pictograma pictogramaCollectionOrphanCheckPictograma : pictogramaCollectionOrphanCheck) {
                 if (illegalOrphanMessages == null) {
                     illegalOrphanMessages = new ArrayList<String>();
                 }
-                illegalOrphanMessages.add("This Cuenta (" + cuenta + ") cannot be destroyed since the Pictograma " + pictogramaListOrphanCheckPictograma + " in its pictogramaList field has a non-nullable cuentaid field.");
+                illegalOrphanMessages.add("This Cuenta (" + cuenta + ") cannot be destroyed since the Pictograma " + pictogramaCollectionOrphanCheckPictograma + " in its pictogramaCollection field has a non-nullable cuentaid field.");
             }
             if (illegalOrphanMessages != null) {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
-            Persona usuarionombre = cuenta.getUsuarionombre();
-            if (usuarionombre != null) {
-                usuarionombre.getCuentaList().remove(cuenta);
-                usuarionombre = em.merge(usuarionombre);
+            Persona personausuario = cuenta.getPersonausuario();
+            if (personausuario != null) {
+                personausuario.getCuentaCollection().remove(cuenta);
+                personausuario = em.merge(personausuario);
             }
             em.remove(cuenta);
             em.getTransaction().commit();
