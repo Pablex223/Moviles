@@ -2,6 +2,14 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/javie/Documents/GitHub/Moviles/Lab10,%20Servlet%20Url/src/java/DB/Database.java</file>
+            <file>file:/C:/Users/javie/Documents/GitHub/Moviles/Lab10,%20Servlet%20Url/src/java/DAO/StudentDAO.java</file>
+            <file>file:/C:/Users/javie/Documents/GitHub/Moviles/Lab10,%20Servlet%20Url/src/java/Servlet.java</file>
+            <file>file:/C:/Users/javie/Documents/GitHub/Moviles/Lab10,%20Servlet%20Url/src/java/BO/CourseBO.java</file>
+            <file>file:/C:/Users/javie/Documents/GitHub/Moviles/Lab10,%20Servlet%20Url/src/java/DAO/CourseDAO.java</file>
+            <file>file:/C:/Users/javie/Documents/GitHub/Moviles/Lab10,%20Servlet%20Url/src/java/Model/Student.java</file>
+            <file>file:/C:/Users/javie/Documents/GitHub/Moviles/Lab10,%20Servlet%20Url/src/java/Model/Course.java</file>
+        </group>
     </open-files>
 </project-private>

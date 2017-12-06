@@ -4,6 +4,7 @@ package com.example.javie.proyecto;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.javie.proyecto.Entidades.Usuario;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
@@ -65,46 +78,48 @@ public class IngresarUsuario extends Fragment {
 
             }
         });
+        final MainActivity myActivity = (MainActivity) getActivity();
         btnIngresar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(verificarUsuario()){
-                    Usuario nuevoUsuario = new Usuario();
-                    String nombre = txtUsuarioIngresar.getText().toString();
-                    String contrasenna = txtContrasenaIngresar.getText().toString();
-                    nuevoUsuario.setEmail(nombre);
-                    nuevoUsuario.setContrasena(contrasenna);
-
-                    SharedPreferences.Editor editor = sharedpreferences.edit();
-
-                    editor.putString(EMAIL, nombre);
-                    editor.putString(CONTRASENA, contrasenna);
-                    editor.commit();
-
-                    Toast.makeText(getActivity(), nuevoUsuario.toString(),Toast.LENGTH_SHORT).show();
-
-                    progressBar.setVisibility(View.VISIBLE);// To Show ProgressBar
-
-                   //Espera 3 segundos para cambiar de pantalla
-                    Handler handler = new Handler();
-                    Runnable runnable = new Runnable() {
-                        @Override
-                        public void run() {
-                            //Second fragment after 5 seconds appears
-                            progressBar.setVisibility(View.INVISIBLE);
-                            FragmentManager manager = getActivity().getSupportFragmentManager();
-                            Inicio inicio = new Inicio();
-                            manager.beginTransaction().replace(R.id.contenedor,
-                                    inicio,
-                                    inicio.getTag()).commit();
-                        }
-                    };
-                    handler.postDelayed(runnable, 3000);
-
-                }
-               else{
-                    Toast.makeText(getActivity(), "Por favor, complete los campos",Toast.LENGTH_SHORT).show();
-               }
+                  new JSONTask().execute("https://jsonparsingdemo-cec5b.firebaseapp.com/jsonData/moviesDemoItem.txt", "0");
+//                if(verificarUsuario()){
+//                    Usuario nuevoUsuario = new Usuario();
+//                    String nombre = txtUsuarioIngresar.getText().toString();
+//                    String contrasenna = txtContrasenaIngresar.getText().toString();
+//                    nuevoUsuario.setEmail(nombre);
+//                    nuevoUsuario.setContrasena(contrasenna);
+//
+//                    SharedPreferences.Editor editor = sharedpreferences.edit();
+//
+//                    editor.putString(EMAIL, nombre);
+//                    editor.putString(CONTRASENA, contrasenna);
+//                    editor.commit();
+//
+//                    Toast.makeText(getActivity(), nuevoUsuario.toString(),Toast.LENGTH_SHORT).show();
+//
+//                    progressBar.setVisibility(View.VISIBLE);// To Show ProgressBar
+//
+//                   //Espera 3 segundos para cambiar de pantalla
+//                    Handler handler = new Handler();
+//                    Runnable runnable = new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            //Second fragment after 5 seconds appears
+//                            progressBar.setVisibility(View.INVISIBLE);
+//                            FragmentManager manager = getActivity().getSupportFragmentManager();
+//                            Inicio inicio = new Inicio();
+//                            manager.beginTransaction().replace(R.id.contenedor,
+//                                    inicio,
+//                                    inicio.getTag()).commit();
+//                        }
+//                    };
+//                    handler.postDelayed(runnable, 3000);
+//
+//                }
+//               else{
+//                    Toast.makeText(getActivity(), "Por favor, complete los campos",Toast.LENGTH_SHORT).show();
+//               }
 
             }
         });
@@ -124,6 +139,68 @@ public class IngresarUsuario extends Fragment {
             return false;
         }
         else return true;
+    }
+
+    public class JSONTask extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            HttpURLConnection connection = null;
+            BufferedReader reader = null;
+            try{
+                URL url = new URL(params[0]);
+                connection = (HttpURLConnection) url.openConnection();
+                connection.connect();
+
+                InputStream stream = connection.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                StringBuffer buffer = new StringBuffer();
+
+
+                String line = "";
+                while((line = reader.readLine())!= null){
+                    buffer.append(line);
+                }
+
+                String finalJSON = buffer.toString();
+                JSONObject parentObject = new JSONObject(finalJSON);
+                JSONArray parentArrey = parentObject.getJSONArray("movies");
+                JSONObject finalObject = parentArrey.getJSONObject(0);
+                String moviename = finalObject.getString("movie");
+                int year = finalObject.getInt("year");
+                if(params[1] == "1") {
+
+                    return moviename + " - " + year;
+                }
+                else {
+                    return year + " - " + moviename;
+                }
+
+            }catch(MalformedURLException e){
+                e.printStackTrace();
+            }catch (IOException e){
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } finally {
+                if(connection != null)
+                    connection.disconnect();
+                if(reader != null)
+                    try {
+                        reader.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+            }
+            return null;
+
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            super.onPostExecute(result);
+            btnIngresar.setText(result);
+        }
     }
 
 
