@@ -3,10 +3,13 @@ package com.example.javie.proyecto;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +20,15 @@ import android.widget.Toast;
 
 import com.example.javie.proyecto.Entidades.Usuario;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -24,7 +36,7 @@ import com.example.javie.proyecto.Entidades.Usuario;
 public class CrearUsuario extends Fragment {
 
     Button btnCrearCuenta;
-    EditText txtNombre, txtEmail, txtContrasena;
+    EditText txtUsuario,txtNombre,txtApellido, txtApellido2, txtEdad, txtEmail, txtContrasena;
     TextView linkLogin;
     private int Modificar_Flag = 0 ;
 
@@ -41,7 +53,12 @@ public class CrearUsuario extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_crear_usuario, container, false);
         btnCrearCuenta = (Button) view.findViewById(R.id.btnCrearCuenta);
+        txtUsuario = (EditText) view.findViewById(R.id.txtUsuario);
         txtNombre = (EditText) view.findViewById(R.id.txtNombre);
+        txtApellido = (EditText) view.findViewById(R.id.txtApellod);
+        txtApellido2 = (EditText) view.findViewById(R.id.txtApellido2);
+
+        txtEdad = (EditText) view.findViewById(R.id.txtEdad);
         txtEmail = (EditText) view.findViewById(R.id.txtEmail);
         txtContrasena = (EditText) view.findViewById(R.id.txtContrasena);
         linkLogin = (TextView) view.findViewById(R.id.linkLogin);
@@ -61,14 +78,10 @@ public class CrearUsuario extends Fragment {
         btnCrearCuenta.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                if(verificarUsuario()){
-                    Usuario nuevoUsuario = new Usuario(txtNombre.getText().toString(),
-                            txtEmail.getText().toString(), txtContrasena.getText().toString());
-                    Toast.makeText(getActivity(), nuevoUsuario.toString(),Toast.LENGTH_SHORT).show();
-                }
-                else{
+                if(verificarUsuario())
+                    new JSONCrearUsuario().execute("http://192.168.1.107:8080/AutServlet/as");
+                else
                     Toast.makeText(getActivity(), "Por favor, complete los campos",Toast.LENGTH_SHORT).show();
-                }
 
             }
         });
@@ -99,11 +112,88 @@ public class CrearUsuario extends Fragment {
         //Agregar los demas campos...
         String emailUsuario = sharedpreferences.getString(EMAIL, null);
         if(emailUsuario != null) {
-            txtEmail.setText(emailUsuario);
+            txtUsuario.setText(emailUsuario);
             btnCrearCuenta.setText("GUARDAR CAMBIOS");
             Modificar_Flag = 1;
         }
     }
 
+    public class JSONCrearUsuario extends AsyncTask<String, String, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            HttpURLConnection conn = null;
+            BufferedReader reader = null;
+            try{
+                URL url = new URL(params[0]);
+                conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                conn.setRequestProperty("Accept","application/json");
+                conn.setDoOutput(true);
+                conn.setDoInput(true);
+
+
+                JSONObject jo = new JSONObject();
+                jo.put("usuario", txtUsuario.getText());
+                jo.put("nombre", txtNombre.getText());
+                jo.put("primerApellido", txtApellido.getText());
+                jo.put("segundoApellido", txtApellido2.getText());
+                jo.put("edad", txtEdad.getText());
+                jo.put("correo", txtEmail.getText());
+                jo.put("cont", txtContrasena.getText());
+
+
+                JSONObject jo1 = new JSONObject();
+                jo1.put("action", "nuevoUsuario");
+                jo1.put("data", jo);
+
+                Log.i("JSON", jo1.toString());
+                DataOutputStream os = new DataOutputStream(conn.getOutputStream());
+                //os.writeBytes(URLEncoder.encode(jsonParam.toString(), "UTF-8"));
+                os.writeBytes(jo1.toString());
+
+                os.flush();
+                os.close();
+                InputStream stream = conn.getInputStream();
+                reader = new BufferedReader(new InputStreamReader(stream));
+                StringBuffer buffer = new StringBuffer();
+
+
+                String line = "";
+                while((line = reader.readLine())!= null){
+                    buffer.append(line);
+                }
+                String resultado;
+                JSONObject respuesta = new JSONObject(buffer.toString());
+                if(respuesta.getBoolean("success"))
+                    resultado = "true";
+                else resultado = "false";
+
+                Log.i("RESPONSE", String.valueOf(buffer.toString()));
+                Log.i("STATUS", String.valueOf(conn.getResponseCode()));
+                Log.i("MSG" , conn.getResponseMessage());
+
+
+
+                conn.disconnect();
+
+                return resultado;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return  null;
+        }
+
+        @Override
+        protected void onPostExecute(String result){
+            super.onPostExecute(result);
+            if(result.equalsIgnoreCase("true")){
+                Toast.makeText(getActivity(), "Se ingreso el usuario efectivamente",Toast.LENGTH_SHORT).show();
+            }
+            else
+                Toast.makeText(getActivity(), "Usuario no ingresado",Toast.LENGTH_SHORT).show();
+        }
+    }
 
 }

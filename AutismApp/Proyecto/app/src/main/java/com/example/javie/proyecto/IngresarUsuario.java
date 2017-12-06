@@ -130,10 +130,6 @@ public class IngresarUsuario extends Fragment {
                 conn.setDoOutput(true);
                 conn.setDoInput(true);
 
-                JSONObject obj = new JSONObject();
-               obj.put("id", "1");
-               obj.put("name", "myname");
-
                JSONObject jo = new JSONObject();
                jo.put("usuario", txtUsuarioIngresar.getText());
                jo.put("contra", txtContrasenaIngresar.getText());

@@ -60,7 +60,35 @@
                     android:layout_height="wrap_content"
                     android:inputType="textCapWords"
                     android:textColor="#ffff"
-                    android:hint="Apellido" />
+                    android:hint="Primer Apellido" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!--  Last Name Label -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+                <EditText android:id="@+id/txtApellido2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textCapWords"
+                    android:textColor="#ffff"
+                    android:hint="Segundo Apellido" />
+            </android.support.design.widget.TextInputLayout>
+
+            <!--  Last Edad Label -->
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp">
+                <EditText android:id="@+id/txtEdad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:textColor="#ffff"
+                    android:hint="Edad" />
             </android.support.design.widget.TextInputLayout>
 
             <!-- Email Label -->

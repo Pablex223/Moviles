@@ -22,6 +22,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.javie.proyecto.AccesoDatos.DatabaseHelper;
 import com.example.javie.proyecto.AccesoDatos.DbBitmapUtility;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity
                 if(status != TextToSpeech.ERROR) {
                     Locale locSpanish = new Locale("spa", "MEX");
                     t1.setLanguage(locSpanish);
-                    //t1.setLanguage(Locale.US);
+                   // t1.setLanguage(Locale.US);
                 }
             }
         });
@@ -171,6 +172,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     public void speak(String text) {
+        Toast.makeText(this, text,Toast.LENGTH_SHORT).show();
         t1.speak(text, TextToSpeech.QUEUE_FLUSH, null);
     }
 
