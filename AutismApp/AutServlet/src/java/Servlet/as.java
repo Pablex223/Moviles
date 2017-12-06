@@ -9,12 +9,8 @@ import Modelo.Persona;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceUnit;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -67,8 +63,15 @@ public class as extends HttpServlet {
        response.setContentType("application/json");
         PrintWriter pw = response.getWriter();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("AutServletPU");
-        Persona persona = new PersonaJpaController(emf).findPersona(data.getString("usuario"));
-        pw.write( new JSONObject().put("login", persona.getCont().equals(data.get("contra"))).toString());
+        try{
+            Persona persona = new PersonaJpaController(emf).findPersona(data.getString("usuario"));
+             pw.write( new JSONObject().put("login", persona.getCont().equals(data.get("contra"))).toString());
+             
+        }catch(JSONException ex){
+             throw ex;
+        }catch(Exception ex){
+             pw.write( new JSONObject().put("login", false).toString());
+        }
         pw.flush();             
     }
     
