@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="AutServletPU" transaction-type="RESOURCE_LOCAL">
+    <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+    <class>Model.Usuario</class>
+    <class>Model.Pictograma</class>
+    <class>Model.Cuenta</class>
+    <class>Model.Categoria</class>
+    <class>Model.Analisis</class>
+    <class>Model.Persona</class>
+    <class>Modelo.Pictograma</class>
+    <class>Modelo.Categoria</class>
+    <class>Modelo.Cuenta</class>
+    <class>Modelo.Persona</class>
+    <class>Modelo.Analisis</class>
+    <class>Modelo.Usuario</class>
+    <exclude-unlisted-classes>false</exclude-unlisted-classes>
+    <properties>
+      <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/autismo?zeroDateTimeBehavior=convertToNull"/>
+      <property name="javax.persistence.jdbc.user" value="root"/>
+      <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="lespaul23"/>
+    </properties>
+  </persistence-unit>
+</persistence>
