@@ -233,9 +233,5 @@ public class MainActivity extends AppCompatActivity
         builder.show();
     }
 
-    public void conectar() throws IOException {
-
-
-    }
 
 }

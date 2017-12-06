@@ -63,7 +63,6 @@ public class IniciarPictogramas extends Fragment {
         mic4 = (ImageView) view.findViewById(R.id.mic4);
 
         imgPictograma = (ImageView) view.findViewById(R.id.imgPictograma);
-        inicializarPictogramas();
 
         btnRespuest1.setOnClickListener(marcarRespuesta);
         btnRespuest2.setOnClickListener(marcarRespuesta);
@@ -78,7 +77,7 @@ public class IniciarPictogramas extends Fragment {
         btnResponder.setOnClickListener(responder);
 
         reiniciarListaBotones();
-
+        inicializarPictogramas();
         return view;
     }
 
@@ -162,14 +161,24 @@ public class IniciarPictogramas extends Fragment {
                     imgPictograma.setImageBitmap(actual.getImagen());
                     Button respuestaCorrecta = botonRandom();
                     respuestaCorrecta.setText(actual.getRespuesta());
-                    Toast.makeText(getActivity(), actual.getRespuestasAlternas().toString(), Toast.LENGTH_SHORT).show();
-                    //llenarRespuestas(respuestaCorrecta, actual);
+                    //Toast.makeText(getActivity(), actual.getRespuestasAlternas().toString(), Toast.LENGTH_SHORT).show();
+                    llenarRespuestas(actual.getRespuestasAlternas());
                     reiniciarListaBotones();
                 }
                 else{
                     Toast.makeText(getActivity(), "¡Gracias por jugar!", Toast.LENGTH_SHORT).show();
                     deshabilitarBotones();
                     btnReinciar.setVisibility(View.VISIBLE);
+                    btnReinciar.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            FragmentManager manager = getActivity().getSupportFragmentManager();
+                            IniciarPictogramas iniciarPictogramas = new IniciarPictogramas();
+                            manager.beginTransaction().replace(R.id.contenedor,
+                                    iniciarPictogramas,
+                                    iniciarPictogramas.getTag()).commit();
+                        }
+                    });
                 }
             }
             else
@@ -186,7 +195,13 @@ public class IniciarPictogramas extends Fragment {
 
     private void inicializarPictogramas(){
         listaPictogramas = activity.getPictogramasPorCategoria("Emocional");
-        imgPictograma.setImageBitmap(listaPictogramas.get(0).getImagen());
+        Pictograma actual = listaPictogramas.get(0);
+        imgPictograma.setImageBitmap(actual.getImagen());
+        Button respuestaCorrecta = botonRandom();
+        respuestaCorrecta.setText(actual.getRespuesta());
+        //Toast.makeText(getActivity(), actual.getRespuestasAlternas().toString(), Toast.LENGTH_SHORT).show();
+        llenarRespuestas(actual.getRespuestasAlternas());
+        reiniciarListaBotones();
     }
 
     private void deshabilitarBotones(){
@@ -203,63 +218,16 @@ public class IniciarPictogramas extends Fragment {
 
     private Button botonRandom(){
         Random rand = new Random();
-        int n = rand.nextInt(4);
+        int n = rand.nextInt(listaBotonesRespuestas.size());
         Button btnRand = listaBotonesRespuestas.get(n);
         listaBotonesRespuestas.remove(n);
         return btnRand;
     }
 
-    private void llenarRespuestas(Button respuestaCorrecta, Pictograma actual){
-        List<String> listaAlternativas = actual.getRespuestasAlternas();
-        int totalRespuestas = listaAlternativas.size();
-        Random rand = new Random();
-        for(int i = 0; i < 3; i++){
-            int n = rand.nextInt(totalRespuestas);
-            listaBotonesRespuestas.get(i).setText(listaAlternativas.get(n));
-            listaAlternativas.remove(n);
-            totalRespuestas--;
-        }
-//        List<Button> listaBotones = new ArrayList<Button>();
-//        switch (respuestaCorrecta.getId()){
-//            case R.id.btnRespuesta1: {
-//                listaBotones.add(btnRespuest2);
-//                listaBotones.add(btnRespuest3);
-//                listaBotones.add(btnRespuest4);
-//            }
-//            break;
-//            case R.id.btnRespuesta2: {
-//                listaBotones.add(btnRespuest1);
-//                listaBotones.add(btnRespuest3);
-//                listaBotones.add(btnRespuest4);
-//
-//            }
-//            break;
-//            case R.id.btnRespuesta3: {
-//                listaBotones.add(btnRespuest1);
-//                listaBotones.add(btnRespuest2);
-//                listaBotones.add(btnRespuest4);
-//
-//            }
-//            break;
-//            case R.id.btnRespuesta4: {
-//                listaBotones.add(btnRespuest1);
-//                listaBotones.add(btnRespuest2);
-//                listaBotones.add(btnRespuest3);
-//
-//            }
-//            break;
-//        }
-//        llenarBotonesRestantes(listaBotones, actual.getCategoria().getRespuestasAlternas(actual.getRespuesta()));
-    }
-
-    private void llenarBotonesRestantes(List<Button> listaBotones, List<String> listaAlternativas){
-        Random rand = new Random();
-        for(int i = 0; i < 3; i++){
-            int totalRespuestas = listaAlternativas.size();
-            int n = rand.nextInt(totalRespuestas);
-            listaBotones.get(i).setText(listaAlternativas.get(n));
-            listaAlternativas.remove(n);
-        }
+    private void llenarRespuestas(List<String> listaAlternativas) {
+        botonRandom().setText(listaAlternativas.get(0));
+        botonRandom().setText(listaAlternativas.get(1));
+        botonRandom().setText(listaAlternativas.get(2));
     }
 
 }

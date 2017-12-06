@@ -82,7 +82,8 @@ public class IngresarUsuario extends Fragment {
         btnIngresar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                  new JSONTask().execute("https://jsonparsingdemo-cec5b.firebaseapp.com/jsonData/moviesDemoItem.txt", "0");
+                  //new JSONTask().execute("https://jsonparsingdemo-cec5b.firebaseapp.com/jsonData/moviesDemoItem.txt", "0");
+                new JSONTask().execute("http://192.168.1.107:8080/AutServlet/", "0");
 //                if(verificarUsuario()){
 //                    Usuario nuevoUsuario = new Usuario();
 //                    String nombre = txtUsuarioIngresar.getText().toString();
@@ -163,26 +164,29 @@ public class IngresarUsuario extends Fragment {
                 }
 
                 String finalJSON = buffer.toString();
-                JSONObject parentObject = new JSONObject(finalJSON);
-                JSONArray parentArrey = parentObject.getJSONArray("movies");
-                JSONObject finalObject = parentArrey.getJSONObject(0);
-                String moviename = finalObject.getString("movie");
-                int year = finalObject.getInt("year");
-                if(params[1] == "1") {
-
-                    return moviename + " - " + year;
-                }
-                else {
-                    return year + " - " + moviename;
-                }
+                return finalJSON;
+//                JSONObject parentObject = new JSONObject(finalJSON);
+//                JSONArray parentArrey = parentObject.getJSONArray("movies");
+//                JSONObject finalObject = parentArrey.getJSONObject(0);
+//                String moviename = finalObject.getString("movie");
+//                int year = finalObject.getInt("year");
+//                if(params[1] == "1") {
+//
+//                    return moviename + " - " + year;
+//                }
+//                else {
+//                    return year + " - " + moviename;
+//                }
 
             }catch(MalformedURLException e){
                 e.printStackTrace();
             }catch (IOException e){
                 e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } finally {
+            }
+//            } catch (JSONException e) {
+//                e.printStackTrace();
+//            }
+             finally {
                 if(connection != null)
                     connection.disconnect();
                 if(reader != null)
@@ -199,7 +203,7 @@ public class IngresarUsuario extends Fragment {
         @Override
         protected void onPostExecute(String result){
             super.onPostExecute(result);
-            btnIngresar.setText(result);
+            //btnIngresar.setText(result);
         }
     }
 
